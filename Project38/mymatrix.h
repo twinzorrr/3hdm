@@ -2,7 +2,7 @@
 #ifndef MYMATRIX_H_
 #define MYMATRIX_H_
 
-#include <Eigen/Dense>
+#include "Eigen/Dense"
 
 using namespace std;
 using namespace Eigen;
