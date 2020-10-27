@@ -1,4 +1,4 @@
-#include <Eigen/KroneckerProduct>
+#include "Eigen/KroneckerProduct"
 #include "myvector.h"
 #include "mymatrix.h"
 #include "yukawa.h"

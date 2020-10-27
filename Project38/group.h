@@ -3,7 +3,7 @@
 #define GROUP_H_
 
 #include <vector>
-#include <Eigen/Dense>
+#include "Eigen/Dense"
 
 using namespace std;
 using namespace Eigen;
