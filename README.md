@@ -28,7 +28,7 @@ A few words about the program itsefl: four classes were introduced
  > **getKroneckerProduct3** - return mymatrix as a result of kronecker product of three mymatrices passed as a first three arguments, the 4th argument determines the final form of this kronecker product and may take one of two values, "charged" or "dirac"<br/>
  > **getEigenvectors1** - returns mymatrix whose columns are eigenvectors corresponding to the eigenvalue 1 of a given mymatrix<br/>
  > **getIntersectionBasis** - returns mymatrix whose columns are basis vectors of the common eigenspace of two subspaces represented by mymatrices passed as arguments<br/>
- > **extractYukawaSolution** - extracts Yukawa solutions from mymatrix, in fact, obtained as a result of finding basis for the intersection of two or more subspaces
+ > **extractYukawaSolution** - extracts Yukawa solutions from mymatrix obtained, in fact, as a result of finding basis for the intersection of two or more subspaces
 
 - group - represents a vector container of mymatrices, from physical point of view represents the discrete group itself (each element of vector is a matrix representation of a given group generator, but not always)
  > **getSize** - returns the number equal to the product of number of generators and matrix representations of a given group<br/>
