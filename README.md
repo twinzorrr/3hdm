@@ -30,8 +30,8 @@ A few words about the program itsefl: four classes were introduced
  > **getIntersectionBasis** - returns mymatrix whose columns are basis vectors of the common eigenspace of two subspaces represented by mymatrices passed as arguments<br/>
  > **extractYukawaSolution** - extracts Yukawa solutions from mymatrix, in fact, obtained as a result of finding basis for the intersection of two or more subspaces
 
-- group - represents a vector container of mymatrices, from physical point of view represents the discrete group itself (each element of vector is a matrix representation of a given group element, but not always)
- > **getSize** - returns the number of elements of a given group<br/>
+- group - represents a vector container of mymatrices, from physical point of view represents the discrete group itself (each element of vector is a matrix representation of a given group generator, but not always)
+ > **getSize** - returns the number equal to the product of number of generators and matrix representations of a given group<br/>
  > **reserve** - reserves the memory for the number of group elements given as a argument<br/>
  > **emplace_back** - adds a new element given as a argument at the end of the group without triggering copy constructor<br/>
  > **push_back** - adds a new element given as a argument at the end of the group<br/>
