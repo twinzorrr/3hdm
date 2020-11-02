@@ -5,7 +5,7 @@ To get more information about the physics behind this project read the document 
 
 The simplest and the best way to run the program is the "Open with visual studio" option under the green Code button in the upper right corner.
 
-A few words about the program itsefl: four classes were introduced
+A few words about the program itself: four classes were introduced
 - myvector - (at this moment) represents VectorXcd from eigen library<br/>
  > **getNumberofElements** - returns the number of elements of a given myvector<br/>
  > **setNumericZerotoActualZero** - sets numeric zeros to actual zeros, mainly used before printing myvector to file<br/>
@@ -54,11 +54,11 @@ A few words about the program itsefl: four classes were introduced
  > **setFirstNonZeroElementto1** - multiplies each Yukawa solutions by scalar in such a way that the first non-zero element is equal to 1<br/>
  > **errorGuard** - checks if obtained vector solution is actual Yukawa solution in three ways: is a eigenvector for the eigenvalue 1 for a kronecker product represented by group and passed as a argument, is a zero vector, is a duplicated solution; if it's not returns false, otherwise returns true<br/>
  > **splitPairsintoVectors** - split pairs of Yukawa solutions into two vectors of Yukawa solutions passed as a arguments<br/>
- > **uniqueVector** - checks if the last element of yukawa is the unique one with compare to the rest elements, if it's not remove this element from yukawa, otherwise do nothing<br/>
+ > **isUniqueVector** - checks if myvector given as a first argument is the unique one with compare to the elements of a given yukawa, if it's unique returns true and adds this myvector to yukawa, otherwise return false and does nothing<br/>
  > **findUniqueVectors** - filters the contents of vector of yukawa objects passed as the first argument and obtained for a given group and return unique Yukawa solutions stored in a yukawa object in second argument, the id of the group is given as a third argument<br/>
- > **uniquePair** - checks if the last two elements of yukawa is the unique pair with compare to all the rest two consecutive elements, if it's not remove these elements from yukawa, otherwise do nothing<br/>
+ > **isUniquePair** - checks if myvectors given as a first and second arguments form a unique pair with compare to all the two consecutive elements of given yukawa, if it's unique returns true and adds these myvectors to yukawa, otherwise return false and does nothing<br/>
  > **findUniquePairs** - filters the contents of vector of yukawa objects passed as a first argument and obtained for a given group and returns unique pairs of Yukawa solutions stored in a yukawa object in second argument, the id of the group is given as a third argument<br/>
- > **uniqueMatrix** - checks if the last element of yukawa forms the unique squared mass matrix with compare to the rest elements, if it's not remove this element from yukawa, otherwise do nothing<br/>
+ > **isUniqueMatrix** - checks if myvector given as a first argument forms the unique squared mass matrix with compare to the elements of a given yukawa, if corresponding matrix is unique returns true and adds this myvector to yukawa, otherwise return false and does nothing<br/>
  > **findUniqueMatrices** - filters the contents of yukawa passed as a first argument and returns Yukawa solutions stored in yukawa object in the second argument that form unique squared mass matrices<br/>
  > **findMassRatio** - filters the contents of yukawa passed as a first argument, returns Yukawa solutions stored in yukawa object in the third argument that form unique squared mass matrices and calculates for them mass ratio that are returned in the fourth argument, the second argument determines the step used in the mass ratio calculation<br/>
  > **findSolutionsWithPhases** - for a given yukawa searches for unique pairs of Yukawa solutions prepared in such a way that the appropriate submyvectors are arranged in ascending order with respect to the index of their first non zero element and with the first non zero element of such modified myvector equal to 1, the results are returned in the first argument<br/>
