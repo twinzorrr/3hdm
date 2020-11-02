@@ -39,10 +39,10 @@ public:
 	void findSolutionsWithUnityElements(Yukawa&, Yukawa&) const;
 	void printToFile(const string&, po);
 	void printToFile(const string&, vector<vector<double>> vvd = {});
-	vector<MyVector>::iterator begin() { return vv_.begin(); }
-	vector<MyVector>::iterator end() { return vv_.end(); }
-	vector<MyVector>::const_iterator begin() const { return vv_.begin(); }
-	vector<MyVector>::const_iterator end() const { return vv_.end(); }
+	auto begin() { return vv_.begin(); }
+	auto end() { return vv_.end(); }
+	auto begin() const { return vv_.begin(); }
+	auto end() const { return vv_.end(); }
 	MyVector& operator[](size_t);
 	const MyVector& operator[](size_t) const;
 	friend ostream& operator<<(ostream&, const Yukawa&);
