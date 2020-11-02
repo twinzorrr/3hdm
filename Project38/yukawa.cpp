@@ -117,17 +117,17 @@ void findUniquePairs(vector<Yukawa>& vys, Yukawa& ys, const string& s) {
 
 bool Yukawa::isUniqueMatrix(const MyVector& mv, const string& s) {
 
-	static vector<Matrix3cd> vm;
+	vector<Matrix3cd> vm = convertSolutionstoMassMatrices();
 	Matrix3cd m = mv.getMassMatrix() * mv.getMassMatrix().adjoint();
 
 	for (size_t i = 0; i < vm.size(); i++) {
 		if (vm[i].isApprox(m, 0.0001)) {
-			if (vs_[i].find(s) == string::npos) vs_[i] += s + " ";
+			vs_[i] += s + " ";
 			return false;
 		}
 	}
 
-	vm.push_back(m); vv_.push_back(mv); vs_.push_back(s + " ");
+	vv_.push_back(mv); vs_.push_back(s + " ");
 	return true;
 
 }
