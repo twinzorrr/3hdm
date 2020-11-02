@@ -23,7 +23,7 @@ int main() {
 	vector<MyMatrix> vmm;
 	vector<Yukawa> vys_c, vys_d, vys_ps;
 	Yukawa ysu_c, ysu_d, ysu_ps, ys_wp, ys_wue, ys_wpc, ys_wpd, ys_wpcm, ys_wpdm;
-
+	
 	ofile1 = fileOpener("outputs/", "charged_all.txt", ios::out);
 	ofile2 = fileOpener("outputs/", "dirac_all.txt", ios::out);
 	ofile3 = fileOpener("outputs/", "pair_solutions.txt", ios::out);
@@ -61,7 +61,7 @@ int main() {
 	findUniqueMatrices(ys_wpd, ys_wpdm);
 	ys_wpcm.printToFile("charged_mass_matrices_unique.txt");
 	ys_wpdm.printToFile("dirac_mass_matrices_unique.txt");
-
+	
 	return EXIT_SUCCESS;
 
 }

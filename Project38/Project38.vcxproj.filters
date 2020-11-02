@@ -21,19 +21,19 @@
     <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="loadm.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
     <ClCompile Include="basicf.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="myvector.cpp">
+    <ClCompile Include="group.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="loadm.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="mymatrix.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="group.cpp">
+    <ClCompile Include="myvector.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="yukawa.cpp">
@@ -41,22 +41,22 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="loadm.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="loadss.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="basicf.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="myvector.h">
+    <ClInclude Include="group.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="loadm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="mymatrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="group.h">
+    <ClInclude Include="myvector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="loadss.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="yukawa.h">
