@@ -29,10 +29,10 @@ public:
 	MyMatrix findIntersectionBasis() const;
 	vector<Yukawa> findSolutions(const string&, vector<string>&, fstream&) const;
 	vector<Yukawa> findPairSolutions(vector<Yukawa>&, vector<Yukawa>&, fstream&, fstream&, fstream&) const;
-	vector<MyMatrix>::iterator begin() { return vm_.begin(); }
-	vector<MyMatrix>::iterator end() { return vm_.end(); }
-	vector<MyMatrix>::const_iterator begin() const { return vm_.begin(); }
-	vector<MyMatrix>::const_iterator end() const { return vm_.end(); }
+	auto begin() { return vm_.begin(); }
+	auto end() { return vm_.end(); }
+	auto begin() const { return vm_.begin(); }
+	auto end() const { return vm_.end(); }
 	MyMatrix& operator[](size_t);
 	const MyMatrix& operator[](size_t) const;
 	friend ostream& operator<<(ostream&, const Group&);
