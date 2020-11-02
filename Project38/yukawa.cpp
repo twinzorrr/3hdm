@@ -68,74 +68,73 @@ void Yukawa::splitPairsintoVectors(Yukawa& ys1, Yukawa& ys2) const {
 
 }
 
-void Yukawa::uniqueVector(const string& s) {
+bool Yukawa::isUniqueVector(const MyVector& mv, const string& s) {
 
-	if (vv_.size() == 1) vs_.push_back(s);
-
-	for (size_t i = 0; i < vv_.size() - 1; i++) {
-		if (vv_[vv_.size() - 1].isApprox(vv_[i], 0.0001)) { vv_.pop_back(); { if (vs_[i].find(s) == string::npos) vs_[i] += s; } break; }
-		if (i == vv_.size() - 2) vs_.push_back(s);
+	for (size_t i = 0; i < vv_.size(); i++) {
+		if (vv_[i].isApprox(mv, 0)) {
+			if (vs_[i].find(s) == string::npos) vs_[i] += s;
+			return false;
+		}
 	}
+
+	vv_.push_back(mv); vs_.push_back(s);
+	return true;
 
 }
 
 void findUniqueVectors(vector<Yukawa>& vys, Yukawa& ys, const string& s) {
 
 	for (auto i : vys) {
-		for (auto j : i) {
-			ys.push_back(j);
-			ys.uniqueVector(s);
-		}
+		for (auto j : i) ys.isUniqueVector(j, s);
 	}
 
 }
 
-void Yukawa::uniquePair(const string& s) {
+bool Yukawa::isUniquePair(const MyVector& mv1, const MyVector& mv2, const string& s) {
 
-	size_t j = 0;
-
-	if (vv_.size() == 2) vs_.push_back(s);
-
-	for (size_t i = 0; i < vv_.size() - 2; i += 2) {
-		if ((vv_[vv_.size() - 2].isApprox(vv_[i], 0.0001)) && (vv_[vv_.size() - 1].isApprox(vv_[i + 1], 0.0001))) { vv_.pop_back(); vv_.pop_back(); { if (vs_[j].find(s) == string::npos) vs_[j] += s; } break; }
-		if (i == vv_.size() - 4) { vs_.push_back(s); }
-		j++;
+	for (size_t i = 0; i < vv_.size(); i += 2) {
+		if (vv_[i].isApprox(mv1, 0.0001) && vv_[i + 1].isApprox(mv2, 0.0001)) {
+			if (vs_[i / 2].find(s) == string::npos) vs_[i / 2] += s;
+			return false;
+		}
 	}
+
+	vv_.push_back(mv1); vv_.push_back(mv2); vs_.push_back(s);
+	return true;
 
 }
 
 void findUniquePairs(vector<Yukawa>& vys, Yukawa& ys, const string& s) {
 
 	for (size_t i = 0; i < vys.size() - 1; i += 2) {
-		if ((vys[i].getSize() == 1) && (vys[i + 1].getSize() == 1)) { ys.push_back(vys[i][0]); ys.push_back(vys[i + 1][0]); ys.uniquePair(s); continue; }
+		if ((vys[i].getSize() == 1) && (vys[i + 1].getSize() == 1)) { ys.isUniquePair(vys[i][0], vys[i + 1][0], s); continue; }
 		for (size_t j = 0; j < vys[i].getSize(); j++) {
-			for (size_t k = 0; k < vys[i + 1].getSize(); k++) { ys.push_back(vys[i][j]); ys.push_back(vys[i + 1][k]); ys.uniquePair(s); }
+			for (size_t k = 0; k < vys[i + 1].getSize(); k++) { ys.isUniquePair(vys[i][j], vys[i + 1][k], s); }
 		}
 	}
 
 }
 
-void Yukawa::uniqueMatrix(const string& s) {
+bool Yukawa::isUniqueMatrix(const MyVector& mv, const string& s) {
 
-	vector<Matrix3cd> vm;
+	static vector<Matrix3cd> vm;
+	Matrix3cd m = mv.getMassMatrix() * mv.getMassMatrix().adjoint();
 
-	if (vv_.size() == 1) vs_.push_back(s + " ");
-	else {
-		(convertSolutionstoMassMatrices()).swap(vm);
-		for (size_t i = 0; i < vm.size() - 1; i++) {
-			if (vm[vm.size() - 1].isApprox(vm[i], 0.0001)) { vv_.pop_back(); vs_[i] += s + " "; break; }
-			if (i == vm.size() - 2) vs_.push_back(s + " ");
+	for (size_t i = 0; i < vm.size(); i++) {
+		if (vm[i].isApprox(m, 0.0001)) {
+			if (vs_[i].find(s) == string::npos) vs_[i] += s + " ";
+			return false;
 		}
 	}
+
+	vm.push_back(m); vv_.push_back(mv); vs_.push_back(s + " ");
+	return true;
 
 }
 
 void findUniqueMatrices(const Yukawa& ysu_v, Yukawa& ysu_m) {
 
-	for (size_t i = 0; i < ysu_v.getSize(); i++) {
-		ysu_m.push_back(ysu_v[i]);
-		ysu_m.uniqueMatrix(to_string(i + 1));
-	}
+	for (size_t i = 0; i < ysu_v.getSize(); i++) ysu_m.isUniqueMatrix(ysu_v[i], to_string(i + 1));
 
 }
 
@@ -157,8 +156,7 @@ void findMassRatio(const Yukawa& ysu_v, double step, Yukawa& ysu_m, vector<vecto
 void Yukawa::findSolutionsWithPhases(Yukawa& ys) const {
 
 	for (size_t i = 0; i < getSize(); i += 2) {
-		ys.push_back(vv_[i].setAllNonZeroElementstoPhases()); ys.push_back(vv_[i + 1].setAllNonZeroElementstoPhases());
-		ys.uniquePair();
+		ys.isUniquePair(vv_[i].setAllNonZeroElementstoPhases(), vv_[i + 1].setAllNonZeroElementstoPhases());
 	}
 
 }
@@ -171,8 +169,7 @@ void Yukawa::findSolutionsWithUnityElements(Yukawa& ys1, Yukawa& ys2) const {
 
 	for (size_t i = 0; i < ys1.getSize(); i += 2) {
 		(ys1[i].getPhases()).swap(vcd1); (ys1[i + 1].getPhases()).swap(vcd2);
-		ys2.push_back(ys1[i].setAllNonZeroElementsto1()); ys2.push_back(ys1[i + 1].setAllNonZeroElementsto1());
-		ys2.uniquePair(convertPhasestoString(vcd1, vcd2));
+		ys2.isUniquePair(ys1[i].setAllNonZeroElementsto1(), ys1[i + 1].setAllNonZeroElementsto1(), convertPhasestoString(vcd1, vcd2));
 	}
 
 }

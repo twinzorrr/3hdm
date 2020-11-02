@@ -28,11 +28,11 @@ public:
 	void setFirstNonZeroElementto1();
 	bool errorGuard(const Group&) const;
 	void splitPairsintoVectors(Yukawa&, Yukawa&) const;
-	void uniqueVector(const string& s = "");
+	bool isUniqueVector(const MyVector&, const string& s = "");
 	friend void findUniqueVectors(vector<Yukawa>&, Yukawa&, const string&);
-	void uniquePair(const string& s = "");
+	bool isUniquePair(const MyVector&, const MyVector&, const string& s = "");
 	friend void findUniquePairs(vector<Yukawa>&, Yukawa&, const string&);
-	void uniqueMatrix(const string& s = "");
+	bool isUniqueMatrix(const MyVector&, const string& s = "");
 	friend void findUniqueMatrices(const Yukawa&, Yukawa&);
 	friend void findMassRatio(const Yukawa&, double, Yukawa&, vector<vector<double>>&);
 	void findSolutionsWithPhases(Yukawa&) const;
