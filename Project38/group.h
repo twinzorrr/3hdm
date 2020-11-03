@@ -21,13 +21,14 @@ public:
 	void reserve(size_t i) { vm_.reserve(i); }
 	void emplace_back(const MatrixXcd& m) { vm_.emplace_back(m); }
 	void push_back(const MyMatrix& mm) { vm_.push_back(mm); }
+	void clear() { vm_.clear(); }
 	void swap(Group& g) { (g.vm_).swap(vm_); (g.group_).swap(group_); size_t tmp; tmp = g.nor_; g.nor_ = nor_; nor_ = tmp; }
 	void setNumericZerotoActualZero();
 	bool isEigenvector1(const MyVector&) const;
 	Group findKroneckerProduct3(size_t, size_t, size_t, const string&) const;
 	Group findEigenvectors1() const;
 	MyMatrix findIntersectionBasis() const;
-	vector<Yukawa> findSolutions(const string&, vector<string>&, fstream&) const;
+	vector<Yukawa> findSolutions(const string&, fstream&, vector<string>* p_vs = nullptr) const;
 	vector<Yukawa> findPairSolutions(vector<Yukawa>&, vector<Yukawa>&, fstream&, fstream&, fstream&) const;
 	auto begin() { return vm_.begin(); }
 	auto end() { return vm_.end(); }

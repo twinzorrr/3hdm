@@ -18,11 +18,12 @@ class Yukawa
 {
 public:
 	Yukawa();
-	explicit Yukawa(vector<MyVector>);
+	explicit Yukawa(vector<MyVector>, vector<string> vs = {});
 	size_t getSize() const { return vv_.size(); }
 	void reserve(size_t i) { vv_.reserve(i); }
 	void emplace_back(const VectorXcd& v) { vv_.emplace_back(v); }
 	void push_back(const MyVector& mv) { vv_.push_back(mv); }
+	void clear() { vv_.clear(); vs_.clear(); }
 	void swap(Yukawa& y) { y.vv_.swap(vv_); y.vs_.swap(vs_); }
 	void setNumericZerotoActualZero();
 	void setFirstNonZeroElementto1();

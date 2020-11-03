@@ -85,7 +85,7 @@ vector<MatrixXcd> loadM(fstream& file, int dim, int prec) {
 				sec = " " + oss.str();
 				g = 0.0;
 			}
-			if (k == dim*dim) { ss << sec; loadMatrix(ss, a, dim); va.push_back(a); k = 0; ss.str(""); ss.clear(); continue; }
+			if (k == dim * dim) { ss << sec; loadMatrix(ss, a, dim); va.push_back(a); k = 0; ss.str(""); ss.clear(); continue; }
 			sec = sec;
 			ss << sec;
 		}

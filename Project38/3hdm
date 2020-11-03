@@ -1,6 +1,0 @@
-#include "myclasses/basicf.h"
-#include "myclasses/loadm.h"
-#include "myclasses/myvector.h"
-#include "myclasses/mymatrix.h"
-#include "myclasses/group.h"
-#include "myclasses/yukawa.h"

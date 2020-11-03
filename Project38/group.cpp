@@ -60,7 +60,7 @@ MyMatrix Group::findIntersectionBasis() const {
 
 }
 
-vector<Yukawa> Group::findSolutions(const string& s, vector<string>& vs, fstream& file) const {
+vector<Yukawa> Group::findSolutions(const string& s, fstream& file, vector<string>* p_vs) const {
 
 	string sout;
 	Group kp, es;
@@ -83,7 +83,7 @@ vector<Yukawa> Group::findSolutions(const string& s, vector<string>& vs, fstream
 				if (ys.errorGuard(kp)) { exit(EXIT_FAILURE); }
 				flash(group_ + " " + sout + " Solution found!", 40, 1);
 				vys.push_back(ys);
-				vs.push_back(to_string(a) + " " + to_string(b));
+				p_vs->push_back(to_string(a) + " " + to_string(b));
 				file << sout << " Yes" << endl << ys;
 				nofs++;
 			}
@@ -102,8 +102,8 @@ vector<Yukawa> Group::findPairSolutions(vector<Yukawa>& vys1, vector<Yukawa>& vy
 	vector<string> vs1, vs2;
 	bool justonce = 1;
 
-	vys1 = findSolutions("charged", vs1, file1);
-	vys2 = findSolutions("dirac", vs2, file2);
+	vys1 = findSolutions("charged", file1, &vs1);
+	vys2 = findSolutions("dirac", file2, &vs2);
 
 	for (size_t i = 0; i < vs1.size(); i++) {
 		for (size_t j = 0; j < vs2.size(); j++) {

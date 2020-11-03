@@ -31,5 +31,7 @@ private:
 	int col_;
 	MatrixXcd m_;
 };
+MyMatrix getKroneckerProduct3(const MyMatrix&, const MyMatrix&, const MyMatrix&, const string&);
+MyMatrix getIntersectionBasis(const MyMatrix&, const MyMatrix&);
 
 #endif // !MYMATRIX_H_

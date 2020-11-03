@@ -51,6 +51,7 @@ bool MyVector::isApprox(const MyVector& mv, double d) const { return v_.isApprox
 
 Matrix3cd MyVector::getMassMatrix(double v1, double v2, double v3, double xi2, double xi3) const {
 
+	assert(v_.size() == 27);
 	return (-1.0 / sqrt(2.0)) * (v1 * getYukawaMatrices_()[0] + exp(-i * xi2) * v2 * getYukawaMatrices_()[1] + exp(-i * xi3) * v3 * getYukawaMatrices_()[2]);
 
 }
