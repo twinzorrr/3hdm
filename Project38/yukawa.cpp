@@ -32,7 +32,12 @@ void Yukawa::printMassRatio(vector<double>& vd, fstream& file) const {
 
 Yukawa::Yukawa() {}
 
-Yukawa::Yukawa(vector<MyVector> vmv) { vv_ = vmv; }
+Yukawa::Yukawa(vector<MyVector> vmv, vector<string> vs) {
+
+	for_each(vmv.begin(), vmv.end(), [](MyVector& mv) { assert(mv.getNumberofElements() == 27); });
+	vv_ = vmv; vs_ = vs;
+
+}
 
 void Yukawa::setNumericZerotoActualZero() { for (auto& i : vv_) i.setNumericZerotoActualZero(); }
 
@@ -71,7 +76,7 @@ void Yukawa::splitPairsintoVectors(Yukawa& ys1, Yukawa& ys2) const {
 bool Yukawa::isUniqueVector(const MyVector& mv, const string& s) {
 
 	for (size_t i = 0; i < vv_.size(); i++) {
-		if (vv_[i].isApprox(mv, 0)) {
+		if (vv_[i].isApprox(mv, 0.0001)) {
 			if (vs_[i].find(s) == string::npos) vs_[i] += s;
 			return false;
 		}
