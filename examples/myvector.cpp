@@ -16,7 +16,7 @@ using namespace Eigen;
 
 int main() {
 
-	typedef complex<double> cd;
+	using cd = complex<double>;
 
 	VectorXcd v(27);
 	v << cd(0, 0), cd(0, 0), cd(0, 0), cd(0, -5.55112e-17), cd(0, 0), cd(0.0911973, -0.157958), cd(0, 0), cd(0, 0), cd(0, 0),
@@ -44,7 +44,7 @@ int main() {
 	cout << "getMassMatrix (with default parameters): " << endl << mv.getMassMatrix() << endl << endl;
 
 	cout << "getMassRatio (with step equal to 10.0): " << endl;
-	mv.getMassRatio(10, vd); for (auto i : vd) cout << i << " "; cout << endl << endl;
+	mv.getMassRatio(10.0, vd); for (auto i : vd) cout << i << " "; cout << endl << endl;
 
 	mv = mv.setAllNonZeroElementsto1();
 	cout << "setAllNonZeroElementsto1: " << endl << mv << endl;
