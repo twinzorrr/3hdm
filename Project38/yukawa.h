@@ -11,7 +11,7 @@ using namespace Eigen;
 class MyVector;
 class Group;
 
-typedef enum class print_option { VECTOR = 1, PAIR } po;
+using po = enum class print_option { VECTOR = 1, PAIR };
 
 
 class Yukawa
@@ -35,11 +35,13 @@ public:
 	friend void findUniquePairs(vector<Yukawa>&, Yukawa&, const string&);
 	bool isUniqueMatrix(const MyVector&, const string& s = "");
 	friend void findUniqueMatrices(const Yukawa&, Yukawa&);
-	friend void findMassRatio(const Yukawa&, double, Yukawa&, vector<vector<double>>&);
-	void findSolutionsWithPhases(Yukawa&) const;
-	void findSolutionsWithUnityElements(Yukawa&, Yukawa&) const;
+	bool isUniqueMatrixPair(const MyVector&, const MyVector&, const string&);
+	friend void findUniqueMatrixPairs(const Yukawa&, Yukawa&);
+	friend void findMassRatio(const Yukawa&, double, Yukawa&, vector<vector<double>>&, po);
+	void findSolutionsWithPhases(Yukawa&, po) const;
+	void findSolutionsWithUnityElements(Yukawa&, Yukawa&, po) const;
 	void printToFile(const string&, po);
-	void printToFile(const string&, vector<vector<double>> vvd = {});
+	void printToFile(const string&, po, vector<vector<double>> vvd);
 	auto begin() { return vv_.begin(); }
 	auto end() { return vv_.end(); }
 	auto begin() const { return vv_.begin(); }
@@ -56,6 +58,7 @@ private:
 void findUniqueVectors(vector<Yukawa>&, Yukawa&, const string&);
 void findUniquePairs(vector<Yukawa>&, Yukawa&, const string&);
 void findUniqueMatrices(const Yukawa&, Yukawa&);
-void findMassRatio(const Yukawa&, double, Yukawa&, vector<vector<double>>&);
+void findUniqueMatrixPairs(const Yukawa&, Yukawa&);
+void findMassRatio(const Yukawa&, double, Yukawa&, vector<vector<double>>&, po);
 
 #endif // !YUKAWA_H_

@@ -77,13 +77,15 @@ void roundComplex(complex<double>& cd, int dec) {
 
 }
 
-string convertPhasestoString(vector<complex<double>>& vcd1, vector<complex<double>>& vcd2) {
+string convertPhasestoString(const vector<complex<double>>& vcd1, const vector<complex<double>>& vcd2) {
 
 	string s;
 	s = "[ ";
-	for (auto& i : vcd1) { setComplexNumericZerotoActualZero(i); roundComplex(i, 6); s += (lexical_cast<string>(i)) + " "; }
-	s += "| ";
-	for (auto& i : vcd2) { setComplexNumericZerotoActualZero(i); roundComplex(i, 6); s += (lexical_cast<string>(i)) + " "; }
+	for (auto i : vcd1) { setComplexNumericZerotoActualZero(i); roundComplex(i, 6); s += (lexical_cast<string>(i)) + " "; }
+	if (vcd2.size()) {
+		s += "| ";
+		for (auto i : vcd2) { setComplexNumericZerotoActualZero(i); roundComplex(i, 6); s += (lexical_cast<string>(i)) + " "; }
+	}
 	s += "]";
 	return s;
 

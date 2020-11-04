@@ -22,7 +22,7 @@ int main() {
 	vector<MatrixXcd> vm;
 	vector<MyMatrix> vmm;
 	vector<Yukawa> vys_c, vys_d, vys_ps;
-	Yukawa ysu_c, ysu_d, ysu_ps, ys_wp, ys_wue, ys_wpc, ys_wpd, ys_wpcm, ys_wpdm;
+	Yukawa ysu_c, ysu_d, ysu_ps, ysu_psm, ys_wp, ys_wue, ys_wpc, ys_wpd, ys_wpcm, ys_wpdm;
 	
 	ofile1 = fileOpener("outputs/", "charged_all.txt", ios::out);
 	ofile2 = fileOpener("outputs/", "dirac_all.txt", ios::out);
@@ -52,15 +52,18 @@ int main() {
 	ysu_d.printToFile("dirac_unique.txt", po::VECTOR);
 	ysu_ps.printToFile("pair_solutions_unique.txt", po::PAIR);
 
-	ysu_ps.findSolutionsWithUnityElements(ys_wp, ys_wue);
+	findUniqueMatrixPairs(ysu_ps, ysu_psm);
+	ysu_psm.printToFile("pair_mass_matrices_unique.txt", po::PAIR, {});
+
+	ysu_ps.findSolutionsWithUnityElements(ys_wp, ys_wue, po::PAIR);
 	ys_wp.printToFile("pair_withphases.txt", po::PAIR);
 	ys_wue.printToFile("pair_withunityelements.txt", po::PAIR);
 
 	ys_wp.splitPairsintoVectors(ys_wpc, ys_wpd);
 	findUniqueMatrices(ys_wpc, ys_wpcm);
 	findUniqueMatrices(ys_wpd, ys_wpdm);
-	ys_wpcm.printToFile("charged_mass_matrices_unique.txt");
-	ys_wpdm.printToFile("dirac_mass_matrices_unique.txt");
+	ys_wpcm.printToFile("charged_mass_matrices_unique.txt", po::VECTOR, {});
+	ys_wpdm.printToFile("dirac_mass_matrices_unique.txt", po::VECTOR, {});
 
 	return EXIT_SUCCESS;
 

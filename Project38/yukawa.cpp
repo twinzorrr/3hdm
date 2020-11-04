@@ -143,11 +143,38 @@ void findUniqueMatrices(const Yukawa& ysu_v, Yukawa& ysu_m) {
 
 }
 
-void findMassRatio(const Yukawa& ysu_v, double step, Yukawa& ysu_m, vector<vector<double>>& vvd) {
+bool Yukawa::isUniqueMatrixPair(const MyVector& mv1, const MyVector& mv2, const string& s) {
+
+	vector<Matrix3cd> vm = convertSolutionstoMassMatrices();
+	Matrix3cd m1 = mv1.getMassMatrix() * mv1.getMassMatrix().adjoint();
+	Matrix3cd m2 = mv2.getMassMatrix() * mv2.getMassMatrix().adjoint();
+
+	for (size_t i = 0; i < vm.size(); i += 2) {
+		if (vm[i].isApprox(m1, 0.0001) && vm[i + 1].isApprox(m2, 0.0001)) {
+			vs_[i / 2] += s + " ";
+			return false;
+		}
+	}
+
+	vv_.push_back(mv1); vv_.push_back(mv2); vs_.push_back(s + " ");
+	return true;
+
+}
+
+void findUniqueMatrixPairs(const Yukawa& ysu_p, Yukawa& ysu_m) {
+
+	for (size_t i = 0; i < ysu_p.getSize(); i += 2) {
+		ysu_m.isUniqueMatrixPair(ysu_p[i], ysu_p[i + 1], to_string((i / 2) + 1));
+	}
+
+}
+
+void findMassRatio(const Yukawa& ysu_v, double step, Yukawa& ysu_m, vector<vector<double>>& vvd, po e) {
 
 	vector<double> vd;
 
-	findUniqueMatrices(ysu_v, ysu_m);
+	if ((int)e == 1) findUniqueMatrices(ysu_v, ysu_m);
+	if ((int)e == 2) findUniqueMatrixPairs(ysu_v, ysu_m);
 	vvd.reserve(ysu_m.getSize());
 
 	for (auto i : ysu_m) {
@@ -158,23 +185,36 @@ void findMassRatio(const Yukawa& ysu_v, double step, Yukawa& ysu_m, vector<vecto
 
 }
 
-void Yukawa::findSolutionsWithPhases(Yukawa& ys) const {
+void Yukawa::findSolutionsWithPhases(Yukawa& ys, po e) const {
 
-	for (size_t i = 0; i < getSize(); i += 2) {
-		ys.isUniquePair(vv_[i].setAllNonZeroElementstoPhases(), vv_[i + 1].setAllNonZeroElementstoPhases());
+	if ((int)e == 1) {
+		for (size_t i = 0; i < getSize(); i++) ys.isUniqueVector(vv_[i].setAllNonZeroElementstoPhases());
+	}
+
+	if ((int)e == 2) {
+		for (size_t i = 0; i < getSize(); i += 2) ys.isUniquePair(vv_[i].setAllNonZeroElementstoPhases(), vv_[i + 1].setAllNonZeroElementstoPhases());
 	}
 
 }
 
-void Yukawa::findSolutionsWithUnityElements(Yukawa& ys1, Yukawa& ys2) const {
+void Yukawa::findSolutionsWithUnityElements(Yukawa& ys1, Yukawa& ys2, po e) const {
 
-	vector<complex<double>> vcd1, vcd2;
+	findSolutionsWithPhases(ys1, e);
 
-	findSolutionsWithPhases(ys1);
+	if ((int)e == 1) {
+		vector<complex<double>> vcd;
+		for (size_t i = 0; i < ys1.getSize(); i++) {
+			(ys1[i].getPhases()).swap(vcd);
+			ys2.isUniqueVector(ys1[i].setAllNonZeroElementsto1(), convertPhasestoString(vcd));
+		}
+	}
 
-	for (size_t i = 0; i < ys1.getSize(); i += 2) {
-		(ys1[i].getPhases()).swap(vcd1); (ys1[i + 1].getPhases()).swap(vcd2);
-		ys2.isUniquePair(ys1[i].setAllNonZeroElementsto1(), ys1[i + 1].setAllNonZeroElementsto1(), convertPhasestoString(vcd1, vcd2));
+	if ((int)e == 2) {
+		vector<complex<double>> vcd1, vcd2;
+		for (size_t i = 0; i < ys1.getSize(); i += 2) {
+			(ys1[i].getPhases()).swap(vcd1); (ys1[i + 1].getPhases()).swap(vcd2);
+			ys2.isUniquePair(ys1[i].setAllNonZeroElementsto1(), ys1[i + 1].setAllNonZeroElementsto1(), convertPhasestoString(vcd1, vcd2));
+		}
 	}
 
 }
@@ -199,7 +239,7 @@ void Yukawa::printToFile(const string& s, po e) {
 
 }
 
-void Yukawa::printToFile(const string& s, vector<vector<double>> vvd) {
+void Yukawa::printToFile(const string& s, po e, vector<vector<double>> vvd) {
 
 	fstream ofile;
 	vector<Matrix3cd> vm;
@@ -207,11 +247,15 @@ void Yukawa::printToFile(const string& s, vector<vector<double>> vvd) {
 
 	ofile = fileOpener("outputs/", s, ios::out);
 	(convertSolutionstoMassMatrices()).swap(vm);
+
 	for (size_t i = 0; i < vm.size(); i++) {
 		mm = MyMatrix(vm[i]); mm.setNumericZerotoActualZero();
-		ofile << i + 1 << " { " << vs_[i] << "} " << endl << mm << endl << endl;
+		if ((int)e == 1) ofile << i + 1 << " { " << vs_[i] << "} " << endl;
+		if (!(i % (int)e)) ofile << (i / 2) + 1 << " { " << vs_[i / 2] << "} " << endl;
+		ofile << mm << endl << endl;
 		if (vvd.size()) printMassRatio(vvd[i], ofile);
 	}
+
 	ofile.close();
 
 }
