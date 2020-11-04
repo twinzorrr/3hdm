@@ -26,6 +26,7 @@ int main() {
 
 	ifile = fileOpener("gs/", "[ 12, 3 ]", ios::in);
 	vm = loadM(ifile, 3, 8);
+	// the second argument determines dim of matrix while the third one determines decimal precision of its elements
 	for (auto i : vm) vmm.emplace_back(i);
 
 	Group g(vmm, "[ 12, 3 ]", 1), kp, es; // the third argument determines the number of representations of given group
