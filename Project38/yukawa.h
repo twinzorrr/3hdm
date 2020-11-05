@@ -15,7 +15,6 @@ class Yukawa
 {
 public:
 	Yukawa();
-	explicit Yukawa(yo);
 	Yukawa(yo, std::vector<MyVector> vmv, std::vector<std::string> vs = {});
 	size_t getSize() const { return vv_.size(); }
 	void reserve(size_t i) { vv_.reserve(i); }

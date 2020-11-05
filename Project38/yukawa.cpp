@@ -32,8 +32,6 @@ void Yukawa::printMassRatio(std::vector<double>& vd, std::fstream& file) const {
 
 Yukawa::Yukawa() { solution_ = yo::UNDEFINED; }
 
-Yukawa::Yukawa(yo solution) { solution_ = solution; }
-
 Yukawa::Yukawa(yo solution, std::vector<MyVector> vmv, std::vector<std::string> vs) {
 
 	for_each(vmv.begin(), vmv.end(), [](MyVector& mv) { assert(mv.getNumberofElements() == 27); });
