@@ -83,7 +83,7 @@ std::vector<Yukawa> Group::findSolutions(const std::string& s, std::fstream& fil
 				if (ys.errorGuard(kp)) { exit(EXIT_FAILURE); }
 				flash(group_ + " " + sout + " Solution found!", 40, 1);
 				vys.push_back(ys);
-				p_vs->push_back(std::to_string(a) + " " + std::to_string(b));
+				if (p_vs) p_vs->push_back(std::to_string(a) + " " + std::to_string(b));
 				file << sout << " Yes" << std::endl << ys;
 				nofs++;
 			}
