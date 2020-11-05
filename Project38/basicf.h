@@ -5,15 +5,13 @@
 #include <vector>
 #include <complex>
 
-using namespace std;
 
-
-void flash(const string&, size_t, size_t);
-fstream fileOpener(const string&, const string&, ios_base::openmode);
-vector<string> loadString(const string&, const string&);
-vector<size_t> loadInteger(const string&, const string&);
-void setComplexNumericZerotoActualZero(complex<double>&);
-void roundComplex(complex<double>&, int);
-string convertPhasestoString(const vector<complex<double>>&, const vector<complex<double>>& vcd = {});
+void flash(const std::string&, size_t, size_t);
+std::fstream fileOpener(const std::string&, const std::string&, std::ios_base::openmode);
+std::vector<std::string> loadString(const std::string&, const std::string&);
+std::vector<size_t> loadInteger(const std::string&, const std::string&);
+void setComplexNumericZerotoActualZero(std::complex<double>&);
+void roundComplex(std::complex<double>&, int);
+std::string convertPhasestoString(const std::vector<std::complex<double>>&, const std::vector<std::complex<double>>& vcd = {});
 
 #endif // !BASICF_H_

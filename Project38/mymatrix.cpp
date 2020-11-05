@@ -3,10 +3,10 @@
 #include "mymatrix.h"
 #include "yukawa.h"
 
-static IOFormat fmtM(6, 0, " ", "\n", "[", "]");
+static Eigen::IOFormat fmtM(6, 0, " ", "\n", "[", "]");
 
 
-void setNumericZerotoActualZero_(MatrixXcd& m) {
+void setNumericZerotoActualZero_(Eigen::MatrixXcd& m) {
 
 	for (int row = 0; row < m.rows(); row++) {
 		for (int col = 0; col < m.cols(); col++) {
@@ -17,9 +17,9 @@ void setNumericZerotoActualZero_(MatrixXcd& m) {
 
 }
 
-MyMatrix::MyMatrix() { row_ = 3; col_ = 3; m_ = MatrixXcd::Zero(row_, col_); }
+MyMatrix::MyMatrix() { row_ = 3; col_ = 3; m_ = Eigen::MatrixXcd::Zero(row_, col_); }
 
-MyMatrix::MyMatrix(MatrixXcd m) { row_ = m.rows(); col_ = m.cols(); m_ = m; }
+MyMatrix::MyMatrix(Eigen::MatrixXcd m) { row_ = m.rows(); col_ = m.cols(); m_ = m; }
 
 void MyMatrix::setNumericZerotoActualZero() { setNumericZerotoActualZero_(m_); }
 
@@ -30,10 +30,10 @@ bool MyMatrix::isEigenvector1(const MyVector& mv) const {
 
 }
 
-MyMatrix getKroneckerProduct3(const MyMatrix& mm1, const MyMatrix& mm2, const MyMatrix& mm3, const string& s) {
+MyMatrix getKroneckerProduct3(const MyMatrix& mm1, const MyMatrix& mm2, const MyMatrix& mm3, const std::string& s) {
 
-	Matrix3cd H1, T1, H2, T3;
-	MatrixXcd KP, KPP;
+	Eigen::Matrix3cd H1, T1, H2, T3;
+	Eigen::MatrixXcd KP, KPP;
 
 	H1 = (mm1.m_).adjoint();
 	T1 = (mm1.m_).transpose();
@@ -49,8 +49,8 @@ MyMatrix getKroneckerProduct3(const MyMatrix& mm1, const MyMatrix& mm2, const My
 
 MyMatrix MyMatrix::getEigenvectors1() const {
 
-	ComplexEigenSolver<MatrixXcd> ces;
-	MatrixXcd m;
+	Eigen::ComplexEigenSolver<Eigen::MatrixXcd> ces;
+	Eigen::MatrixXcd m;
 	size_t j, n;
 	bool con;
 
@@ -70,12 +70,12 @@ MyMatrix MyMatrix::getEigenvectors1() const {
 
 MyMatrix getIntersectionBasis(const MyMatrix& mm1, const MyMatrix& mm2) {
 
-	MatrixXcd m, mn, mm;
-	VectorXcd v;
+	Eigen::MatrixXcd m, mn, mm;
+	Eigen::VectorXcd v;
 
 	m.resize(27, mm1.col_ + mm2.col_);
 	m << mm1.m_, -1.0 * mm2.m_;
-	FullPivLU<MatrixXcd> lu(m);
+	Eigen::FullPivLU<Eigen::MatrixXcd> lu(m);
 	mn = lu.kernel();
 
 	if (!lu.dimensionOfKernel()) { return MyMatrix(mn); }
@@ -102,7 +102,7 @@ Yukawa MyMatrix::extractYukawaSolution() const {
 
 }
 
-ostream& operator<<(ostream& os, const MyMatrix& mm) {
+std::ostream& operator<<(std::ostream& os, const MyMatrix& mm) {
 
 	return os << (mm.m_).format(fmtM);
 

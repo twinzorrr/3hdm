@@ -10,29 +10,26 @@
 #include "group.h"
 #include "yukawa.h"
 
-using namespace std;
-using namespace Eigen;
-
 
 int main() {
 	
-	fstream ifile, ofile1, ofile2, ofile3;
-	vector<string> vs;
-	vector<size_t> vn;
-	vector<MatrixXcd> vm;
-	vector<MyMatrix> vmm;
-	vector<Yukawa> vys_c, vys_d, vys_ps;
+	std::fstream ifile, ofile1, ofile2, ofile3;
+	std::vector<std::string> vs;
+	std::vector<size_t> vn;
+	std::vector<Eigen::MatrixXcd> vm;
+	std::vector<MyMatrix> vmm;
+	std::vector<Yukawa> vys_c, vys_d, vys_ps;
 	Yukawa ysu_c, ysu_d, ysu_ps, ysu_psm, ys_wp, ys_wue, ys_wpc, ys_wpd, ys_wpcm, ys_wpdm;
 	
-	ofile1 = fileOpener("outputs/", "charged_all.txt", ios::out);
-	ofile2 = fileOpener("outputs/", "dirac_all.txt", ios::out);
-	ofile3 = fileOpener("outputs/", "pair_solutions.txt", ios::out);
+	ofile1 = fileOpener("outputs/", "charged_all.txt", std::ios::out);
+	ofile2 = fileOpener("outputs/", "dirac_all.txt", std::ios::out);
+	ofile3 = fileOpener("outputs/", "pair_solutions.txt", std::ios::out);
 
 	vs = loadString("", "groups.txt");
 	vn = loadInteger("", "nors.txt");
 
 	for (size_t s = 0; s < vs.size(); s++) {
-		ifile = fileOpener("gs/", vs[s], ios::in);
+		ifile = fileOpener("gs/", vs[s], std::ios::in);
 		vm = loadM(ifile, 3, 8);
 		vmm.reserve(vm.size());
 		for (auto i : vm) vmm.emplace_back(i);
@@ -48,23 +45,23 @@ int main() {
 	ofile2.close();
 	ofile1.close();
 
-	ysu_c.printToFile("charged_unique.txt", po::VECTOR);
-	ysu_d.printToFile("dirac_unique.txt", po::VECTOR);
-	ysu_ps.printToFile("pair_solutions_unique.txt", po::PAIR);
-
+	ysu_c.printToFile("charged_unique.txt");
+	ysu_d.printToFile("dirac_unique.txt");
+	ysu_ps.printToFile("pair_solutions_unique.txt");
+	
 	findUniqueMatrixPairs(ysu_ps, ysu_psm);
-	ysu_psm.printToFile("pair_mass_matrices_unique.txt", po::PAIR, {});
+	ysu_psm.printToFile("pair_mass_matrices_unique.txt", {});
 
-	ysu_ps.findSolutionsWithUnityElements(ys_wp, ys_wue, po::PAIR);
-	ys_wp.printToFile("pair_withphases.txt", po::PAIR);
-	ys_wue.printToFile("pair_withunityelements.txt", po::PAIR);
-
+	ysu_ps.findSolutionsWithUnityElements(ys_wp, ys_wue);
+	ys_wp.printToFile("pair_withphases.txt");
+	ys_wue.printToFile("pair_withunityelements.txt");
+	
 	ys_wp.splitPairsintoVectors(ys_wpc, ys_wpd);
 	findUniqueMatrices(ys_wpc, ys_wpcm);
 	findUniqueMatrices(ys_wpd, ys_wpdm);
-	ys_wpcm.printToFile("charged_mass_matrices_unique.txt", po::VECTOR, {});
-	ys_wpdm.printToFile("dirac_mass_matrices_unique.txt", po::VECTOR, {});
-
+	ys_wpcm.printToFile("charged_mass_matrices_unique.txt", {});
+	ys_wpdm.printToFile("dirac_mass_matrices_unique.txt", {});
+	
 	return EXIT_SUCCESS;
 
 }

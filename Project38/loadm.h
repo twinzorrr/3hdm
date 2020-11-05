@@ -5,10 +5,7 @@
 #include <vector>
 #include "Eigen/Dense"
 
-using namespace std;
-using namespace Eigen;
 
-
-vector<MatrixXcd> loadM(fstream&, int, int);
+std::vector<Eigen::MatrixXcd> loadM(std::fstream&, int, int);
 
 #endif

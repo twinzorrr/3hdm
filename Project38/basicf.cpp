@@ -8,23 +8,23 @@
 using boost::lexical_cast;
 
 
-void flash(const string& text, size_t width, size_t time) {
+void flash(const std::string& text, size_t width, size_t time) {
 
-	cout << setw(width) << left << text << "\r";
+	std::cout << std::setw(width) << std::left << text << "\r";
 	fflush(stdout);
 	Sleep(time);
 
 }
 
-void checkFile(fstream& file, const string& filename) {
+void checkFile(std::fstream& file, const std::string& filename) {
 
-	if (file.fail()) { cerr << "File " << filename << " Acces Denied!" << endl; exit(EXIT_FAILURE); }
+	if (file.fail()) { std::cerr << "File " << filename << " Acces Denied!" << std::endl; exit(EXIT_FAILURE); }
 
 }
 
-fstream fileOpener(const string& path, const string& filename, ios_base::openmode mode) {
+std::fstream fileOpener(const std::string& path, const std::string& filename, std::ios_base::openmode mode) {
 
-	fstream ifile;
+	std::fstream ifile;
 
 	ifile.open(path + filename, mode);
 	checkFile(ifile, filename);
@@ -33,13 +33,13 @@ fstream fileOpener(const string& path, const string& filename, ios_base::openmod
 
 }
 
-vector<string> loadString(const string& path, const string& filename) {
+std::vector<std::string> loadString(const std::string& path, const std::string& filename) {
 
-	fstream ifile;
-	string line;
-	vector<string> vline;
+	std::fstream ifile;
+	std::string line;
+	std::vector<std::string> vline;
 
-	ifile = fileOpener(path, filename, ios::in);
+	ifile = fileOpener(path, filename, std::ios::in);
 	while (getline(ifile, line)) vline.push_back(line);
 	ifile.close();
 
@@ -47,13 +47,13 @@ vector<string> loadString(const string& path, const string& filename) {
 
 }
 
-vector<size_t> loadInteger(const string& path, const string& filename) {
+std::vector<size_t> loadInteger(const std::string& path, const std::string& filename) {
 
-	fstream ifile;
-	string line;
-	vector<size_t> vn;
+	std::fstream ifile;
+	std::string line;
+	std::vector<size_t> vn;
 
-	ifile = fileOpener(path, filename, ios::in);
+	ifile = fileOpener(path, filename, std::ios::in);
 	while (getline(ifile, line)) vn.push_back(lexical_cast<size_t>(line));
 	ifile.close();
 
@@ -61,30 +61,30 @@ vector<size_t> loadInteger(const string& path, const string& filename) {
 
 }
 
-void setComplexNumericZerotoActualZero(complex<double>& cd) {
+void setComplexNumericZerotoActualZero(std::complex<double>& cd) {
 
 	if (abs(real(cd)) < 10 * DBL_EPSILON) cd.real(0.0);
 	if (abs(imag(cd)) < 10 * DBL_EPSILON) cd.imag(0.0);
 
 }
 
-void roundComplex(complex<double>& cd, int dec) {
+void roundComplex(std::complex<double>& cd, int dec) {
 
-	stringstream ss_real, ss_imag;
-	ss_real << setprecision(dec) << fixed << real(cd);
-	ss_imag << setprecision(dec) << fixed << imag(cd);
+	std::stringstream ss_real, ss_imag;
+	ss_real << std::setprecision(dec) << std::fixed << real(cd);
+	ss_imag << std::setprecision(dec) << std::fixed << imag(cd);
 	cd.real(stod(ss_real.str())); cd.imag(stod(ss_imag.str()));
 
 }
 
-string convertPhasestoString(const vector<complex<double>>& vcd1, const vector<complex<double>>& vcd2) {
+std::string convertPhasestoString(const std::vector<std::complex<double>>& vcd1, const std::vector<std::complex<double>>& vcd2) {
 
-	string s;
+	std::string s;
 	s = "[ ";
-	for (auto i : vcd1) { setComplexNumericZerotoActualZero(i); roundComplex(i, 6); s += (lexical_cast<string>(i)) + " "; }
+	for (auto i : vcd1) { setComplexNumericZerotoActualZero(i); roundComplex(i, 6); s += (lexical_cast<std::string>(i)) + " "; }
 	if (vcd2.size()) {
 		s += "| ";
-		for (auto i : vcd2) { setComplexNumericZerotoActualZero(i); roundComplex(i, 6); s += (lexical_cast<string>(i)) + " "; }
+		for (auto i : vcd2) { setComplexNumericZerotoActualZero(i); roundComplex(i, 6); s += (lexical_cast<std::string>(i)) + " "; }
 	}
 	s += "]";
 	return s;
