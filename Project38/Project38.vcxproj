@@ -143,11 +143,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="basicf.cpp" />
+    <ClCompile Include="examples\source.cpp" />
     <ClCompile Include="group.cpp" />
     <ClCompile Include="loadm.cpp" />
     <ClCompile Include="mymatrix.cpp" />
     <ClCompile Include="myvector.cpp" />
-    <ClCompile Include="Source.cpp" />
     <ClCompile Include="yukawa.cpp" />
   </ItemGroup>
   <ItemGroup>
