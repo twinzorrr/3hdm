@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "Eigen/Dense"
+#include "../Eigen/Dense"
 
 #include "../basicf.h"
 #include "../loadm.h"
@@ -21,7 +21,7 @@ int main() {
 	std::vector<Eigen::MatrixXcd> vm;
 	std::vector<MyMatrix> vmm;
 
-	ifile = fileOpener("../gs/", "[ 12, 3 ]", std::ios::in);
+	ifile = fileOpener("gs/", "[ 12, 3 ]", std::ios::in);
 	vm = loadM(ifile, 3, 8);
 	// the second argument determines dim of matrix while the third one determines decimal precision of its elements
 	for (auto i : vm) vmm.emplace_back(i);
@@ -58,7 +58,7 @@ int main() {
 
 	vy_c.clear(); vy_d.clear();
 	vy_ps = g.findPairSolutions(vy_c, vy_d, ofile_c, ofile_d, ofile_ps);
-	std::cout << "findPairSolutions: " << vy_c.size() << " (charged) " << vy_d.size() << " (dirac) " << vy_ps.size() << " (pair) " << std::endl;
+	std::cout << "findPairSolutions: " << vy_c.size() << " (charged) " << vy_d.size() << " (dirac) " << vy_ps.size() / 2 << " (pair) " << std::endl;
 
 	// It is not recommended to initialize groups by our hands, however if one wants to do that then remember that
 	// their matrix representations must be 3-dim

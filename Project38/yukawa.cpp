@@ -246,7 +246,7 @@ void Yukawa::printToFile(const std::string& s) {
 	std::fstream ofile;
 	int k;
 
-	ofile = fileOpener("../outputs/", s, std::ios::out);
+	ofile = fileOpener("outputs/", s, std::ios::out);
 
 	for (size_t i = 0; i < vv_.size(); i += (int)solution_) {
 		k = 0;
@@ -267,7 +267,7 @@ void Yukawa::printToFile(const std::string& s, std::vector<std::vector<double>> 
 	std::vector<Eigen::Matrix3cd> vm;
 	MyMatrix mm;
 
-	ofile = fileOpener("../outputs/", s, std::ios::out);
+	ofile = fileOpener("outputs/", s, std::ios::out);
 	(convertSolutionstoMassMatrices()).swap(vm);
 	
 	for (size_t i = 0; i < vm.size(); i++) {

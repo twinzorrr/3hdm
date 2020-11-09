@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "Eigen/Dense"
+#include "../Eigen/Dense"
 
 #include "../basicf.h"
 #include "../loadm.h"
@@ -21,7 +21,7 @@ int main() {
 	std::vector<Eigen::MatrixXcd> vm;
 	std::vector<MyMatrix> vmm;
 
-	ifile = fileOpener("../gs/", "[ 21, 1 ]", std::ios::in);
+	ifile = fileOpener("gs/", "[ 21, 1 ]", std::ios::in);
 	vm = loadM(ifile, 3, 8);
 	// the second argument determines dim of matrix while the third one determines decimal precision of its elements
 	for (auto i : vm) vmm.emplace_back(i);

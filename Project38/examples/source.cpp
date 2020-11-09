@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "Eigen/Dense"
+#include "../Eigen/Dense"
 
 #include "../basicf.h"
 #include "../loadm.h"
@@ -20,13 +20,13 @@ int main() {
 	std::vector<MyMatrix> vmm;
 	std::vector<Yukawa> vys_c, vys_d, vys_ps;
 	Yukawa ysu_c, ysu_d, ysu_ps, ysu_psm, ys_wp, ys_wue, ys_wpc, ys_wpd, ys_wpcm, ys_wpdm;
-	
-	ofile1 = fileOpener("../outputs/", "charged_all.txt", std::ios::out);
-	ofile2 = fileOpener("../outputs/", "dirac_all.txt", std::ios::out);
-	ofile3 = fileOpener("../outputs/", "pair_solutions.txt", std::ios::out);
 
-	vs = loadString("../", "groups.txt");
-	vn = loadInteger("../", "nors.txt");
+	ofile1 = fileOpener("outputs/", "charged_all.txt", std::ios::out);
+	ofile2 = fileOpener("outputs/", "dirac_all.txt", std::ios::out);
+	ofile3 = fileOpener("outputs/", "pair_solutions.txt", std::ios::out);
+
+	vs = loadString("", "groups.txt");
+	vn = loadInteger("", "nors.txt");
 
 	for (size_t s = 0; s < vs.size(); s++) {
 		ifile = fileOpener("gs/", vs[s], std::ios::in);
@@ -63,5 +63,5 @@ int main() {
 	ys_wpdm.printToFile("dirac_mass_matrices_unique.txt", {});
 	
 	return EXIT_SUCCESS;
-
+	
 }

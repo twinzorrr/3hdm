@@ -18,7 +18,7 @@ void flash(const std::string& text, size_t width, size_t time) {
 
 void checkFile(std::fstream& file, const std::string& filename) {
 
-	if (file.fail()) { std::cerr << "File " << filename << " Acces Denied!" << std::endl; exit(EXIT_FAILURE); }
+	if (file.fail()) { std::cerr << "File " << filename << " Access Denied!" << std::endl; exit(EXIT_FAILURE); }
 
 }
 

@@ -7,6 +7,13 @@ static const std::complex<double> i(0.0, 1.0);
 static const double pi = acos(-1.0);
 
 
+int getIndexofFirstNonZeroElement(const Eigen::VectorXcd& v) {
+
+	for (int i = 0; i < v.size(); i++) { if (!(abs(v(i)) < DBL_EPSILON * 10)) return i; }
+	return 0;
+
+}
+
 void setNumericZerotoActualZero_(Eigen::VectorXcd& v) {
 
 	for (int i = 0; i < v.size(); i++) {
@@ -31,7 +38,7 @@ std::vector<Eigen::Matrix3cd> MyVector::getYukawaMatrices_() const {
 	vh.reserve(3);
 
 	for (int i = 0; i < getNumberofElements(); i += 9) {
-		h = Eigen::Map<Eigen::Matrix<std::complex<double>, 3, 3>>((segment(i, 9)).array()).transpose();
+		h = Eigen::Map<const Eigen::Matrix3cd>(v_.segment(i, 9).data());
 		vh.push_back(h.transpose());
 	}
 
@@ -39,7 +46,7 @@ std::vector<Eigen::Matrix3cd> MyVector::getYukawaMatrices_() const {
 
 }
 
-MyVector::MyVector() { size_ = 3; v_ = Eigen::VectorXcd::Zero(size_); }
+MyVector::MyVector() { size_ = 0; v_ = Eigen::VectorXcd::Zero(size_); }
 
 MyVector::MyVector(Eigen::VectorXcd v) { v_ = v; size_ = v.size(); }
 
@@ -92,16 +99,6 @@ void MyVector::getMassRatio(double step, std::vector<double>& vd) const {
 
 }
 
-MyVector MyVector::segment(int i, int n) const { return MyVector(v_.segment(i, n)); }
-
-std::complex<double>* MyVector::array() const {
-
-	static std::complex<double> array[9];
-	for (int i = 0; i < 9; i++) array[i] = v_[i];
-	return array;
-
-}
-
 std::vector<std::complex<double>> MyVector::getPhases() {
 
 	std::vector<std::complex<double>> vcd;
@@ -119,25 +116,16 @@ std::vector<std::complex<double>> MyVector::getPhases() {
 }
 
 MyVector MyVector::setAllNonZeroElementstoPhases() const {
+	
+	assert(v_.size() % 9 == 0 && v_.size() > 9);
 
 	std::vector<Eigen::VectorXcd> vv;
-	std::vector<int> vi;
-	int min_index, max_index;
-	Eigen::VectorXcd v1(9), v2(9), v(27);
+	Eigen::VectorXcd v;
 
-	vv = { v_.segment(0,9),v_.segment(9,9),v_.segment(18,9) };
-	for (auto i : vv) {
-		for (int j = 0; j < i.size(); j++) {
-			if (!(abs(i(j)) < DBL_EPSILON * 10)) { vi.push_back(j); break; }
-		}
-	}
-	min_index = min_element(vi.begin(), vi.end()) - vi.begin();
-	max_index = max_element(vi.begin(), vi.end()) - vi.begin();
-	v1 << vv[min_index]; v2 << vv[max_index];
-	if (min_index > max_index) { vv.erase(vv.begin() + min_index); vv.erase(vv.begin() + max_index); }
-	else { vv.erase(vv.begin() + max_index); vv.erase(vv.begin() + min_index); }
-	v << v1, vv[0], v2; setFirstNonZeroElementto1_(v);
-
+	for (int i = 0; i < v_.size(); i += 9) vv.push_back(v_.segment(i, 9));
+	std::sort(vv.begin(), vv.end(), [](Eigen::VectorXcd x, Eigen::VectorXcd y) { return getIndexofFirstNonZeroElement(x) < getIndexofFirstNonZeroElement(y); });
+	for (size_t i = 0; i < vv.size(); i++) { v.conservativeResize((i + 1) * 9); v.tail(9) = vv[i]; }
+	setFirstNonZeroElementto1_(v);
 	return MyVector(v);
 
 }
