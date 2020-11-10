@@ -46,9 +46,9 @@ std::vector<Eigen::Matrix3cd> MyVector::getYukawaMatrices_() const {
 
 }
 
-MyVector::MyVector() { size_ = 0; v_ = Eigen::VectorXcd::Zero(size_); }
+MyVector::MyVector() : size_(0), v_(Eigen::VectorXcd::Zero(size_)) {}
 
-MyVector::MyVector(Eigen::VectorXcd v) { v_ = v; size_ = v.size(); }
+MyVector::MyVector(const Eigen::VectorXcd& v) : size_(v.size()), v_(v) {}
 
 void MyVector::setNumericZerotoActualZero() { setNumericZerotoActualZero_(v_); }
 

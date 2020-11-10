@@ -10,7 +10,7 @@ class MyVector
 {
 public:
 	MyVector();
-	explicit MyVector(Eigen::VectorXcd);
+	explicit MyVector(const Eigen::VectorXcd&);
 	int getNumberofElements() const { return size_; }
 	void setNumericZerotoActualZero();
 	void setFirstNonZeroElementto1();

@@ -12,7 +12,7 @@ class MyMatrix
 {
 public:
 	MyMatrix();
-	explicit MyMatrix(Eigen::MatrixXcd);
+	explicit MyMatrix(const Eigen::MatrixXcd&);
 	int getNumberofRows() const { return row_; }
 	int getNumberofCols() const { return col_; }
 	void setNumericZerotoActualZero();

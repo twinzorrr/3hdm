@@ -17,9 +17,9 @@ void setNumericZerotoActualZero_(Eigen::MatrixXcd& m) {
 
 }
 
-MyMatrix::MyMatrix() { row_ = 0; col_ = 0; m_ = Eigen::MatrixXcd::Zero(row_, col_); }
+MyMatrix::MyMatrix() : row_(0), col_(0), m_(Eigen::MatrixXcd::Zero(row_, col_)) {}
 
-MyMatrix::MyMatrix(Eigen::MatrixXcd m) { row_ = m.rows(); col_ = m.cols(); m_ = m; }
+MyMatrix::MyMatrix(const Eigen::MatrixXcd& m) : row_(m.rows()), col_(m.cols()), m_(m) {}
 
 void MyMatrix::setNumericZerotoActualZero() { setNumericZerotoActualZero_(m_); }
 

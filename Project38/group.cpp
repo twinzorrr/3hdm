@@ -7,9 +7,11 @@
 #include "yukawa.h"
 
 
-Group::Group() { group_ = "No Group"; nor_ = 0; nog_ = 0; }
+Group::Group() : nor_(0), nog_(0), group_("No group") {}
 
-Group::Group(std::vector<MyMatrix> vmm, std::string group, size_t nor) { vm_ = vmm; group_ = group; nor_ = nor; if (nor) nog_ = vmm.size() / nor; else nog_ = 0; }
+Group::Group(const std::vector<MyMatrix>& vmm, const std::string& group, size_t nor)
+	: nor_(nor), nog_((nor != 0) ? vmm.size() / nor : 0), group_(group), vm_(vmm)
+{}
 
 void Group::setNumericZerotoActualZero() { for (auto& i : vm_) i.setNumericZerotoActualZero(); }
 

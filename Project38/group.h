@@ -14,7 +14,7 @@ class Group
 {
 public:
 	Group();
-	explicit Group(std::vector<MyMatrix>, std::string group = "No Group", size_t nor = 0);
+	explicit Group(const std::vector<MyMatrix>&, const std::string& group = "No Group", size_t nor = 0);
 	size_t getSize() const { return vm_.size(); }
 	void reserve(size_t i) { vm_.reserve(i); }
 	void emplace_back(const Eigen::MatrixXcd& m) { vm_.emplace_back(m); }

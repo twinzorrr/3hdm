@@ -15,7 +15,7 @@ class Yukawa
 {
 public:
 	Yukawa();
-	Yukawa(yo, std::vector<MyVector> vmv, std::vector<std::string> vs = {});
+	Yukawa(yo, const std::vector<MyVector>& vmv, const std::vector<std::string>& vs = {});
 	size_t getSize() const { return vv_.size(); }
 	void reserve(size_t i) { vv_.reserve(i); }
 	void emplace_back(const Eigen::VectorXcd& v) { vv_.emplace_back(v); }
