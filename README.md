@@ -12,12 +12,10 @@ A few words about the program itself: four classes were introduced
  > **setFirstNonZeroElementto1** - multiplies myvector by scalar in such a way that the first non-zero element is equal to 1<br/>
  > **norm** - returns a norm of a given myvector<br/>
  > **isApprox** - compares a given myvector with another passed as the first argument for equality with approximation given by the second argument<br/>
- > **getMassMatrix** - for a given myvector creates a mass matrix whose form depends on the physics model, model parameters constitute the arguments list<br/>
+ > **getMassMatrix** - for a given myvector creates a mass matrix whose form depends on the physics model, model parameters constitute the arguments list, this method is limited to 27 dimensional myvector objects only<br/>
  > **getMassRatio** - for a given myvector calculates mass ratio and returns the result in a second argument, the first argument determines the step used in calculation<br/>
- > **segment** - returns myvector containing the elements of initial myvector whose number is determined by the first argument, starting from index determined by the second argument<br/>
- > **array** - converts myvector into an array and returns a pointer to this array<br/>
  > **getPhases** - for a given myvector returns all non-zero elements except the first one<br/>
- > **setAllNonZeroElementstoPhases** - arranges submyvectors of a given myvector in ascending order with respect to the index of their first non-zero element and then multiplies myvector by a scalar to set first non-zero element to 1<br/>
+ > **setAllNonZeroElementstoPhases** - arranges submyvectors of a given myvector in ascending order with respect to the index of their first non-zero element and then multiplies myvector by a scalar to set first non-zero element to 1, this method is limited to myvector objects whose dimension is divisible by 9<br/>
  > **setAllNonZeroElementsto1** - sets all non-zero elements to 1
 
 - mymatrix - (at this moment) represents MatrixXcd from eigen library
