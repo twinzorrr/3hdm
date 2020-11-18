@@ -32,10 +32,10 @@ void Yukawa::printMassRatio(std::vector<double>& vd, std::fstream& file) const {
 
 Yukawa::Yukawa() : solution_(yo::UNDEFINED) {}
 
-Yukawa::Yukawa(yo solution, std::vector<MyVector>& vmv, const std::vector<std::string>& vs)
+Yukawa::Yukawa(yo solution, const std::vector<MyVector>& vmv, const std::vector<std::string>& vs)
 	: solution_(solution), vs_(vs), vv_(vmv)
 {
-	for_each(vmv.begin(), vmv.end(), [](MyVector& mv) { assert(mv.getNumberofElements() == 27); });
+	for_each(vmv.begin(), vmv.end(), [](const MyVector& mv) { assert(mv.getNumberofElements() == 27); });
 }
 
 void Yukawa::setNumericZerotoActualZero() { for (auto& i : vv_) i.setNumericZerotoActualZero(); }

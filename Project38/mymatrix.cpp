@@ -59,7 +59,7 @@ MyMatrix MyMatrix::getEigenvectors1() const {
 	j = 0; n = 0;
 
 	for (int i = 0; i < (ces.eigenvalues()).size(); i++) {
-		con = (abs(real(ces.eigenvalues()[i]) - 1.0) < 0.0001) & (abs(imag(ces.eigenvalues()[i])) < 0.0001);
+		con = (abs(real(ces.eigenvalues()[i]) - 1.0) < 0.0001) && (abs(imag(ces.eigenvalues()[i])) < 0.0001);
 		if (con) { m.col(j) = (ces.eigenvectors()).col(i); j++; n++; }
 	}
 	m.conservativeResize(27, n);

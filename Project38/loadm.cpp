@@ -50,7 +50,7 @@ std::complex<double> e(const std::string& s, double d1, double d2, double d3, do
 	if (s.find("/") != std::string::npos) { d = { 2.0 * d4 / d3, 0.0 }; c = { d1 / d2, 0.0 }; }
 	else if (s.find("*") != std::string::npos) { d = { 2.0 * d3 / d2, 0.0 }; c = { d1, 0.0 }; }
 
-	con = (s[0] == '-') | (s[1] == '-');
+	con = (s[0] == '-') || (s[1] == '-');
 	if (con) return -1.0 * c * exp(i * pi * d);
 	return c * exp(i * pi * d);
 
@@ -79,7 +79,7 @@ std::vector<Eigen::MatrixXcd> loadM(std::fstream& file, int dim, int prec) {
 			if (sec.find("E") != std::string::npos) {
 				std::ostringstream oss;
 				f = e(sec, d(res)[0], d(res)[1], d(res)[2], d(res)[3]);
-				if ((*start == '-') | (*start == '+')) { k--; g += f; continue; }
+				if ((*start == '-') || (*start == '+')) { k--; g += f; continue; }
 				f += g;
 				oss << std::setprecision(prec) << f;
 				sec = " " + oss.str();
