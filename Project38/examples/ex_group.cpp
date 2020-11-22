@@ -3,12 +3,7 @@
 #include <vector>
 #include "../Eigen/Dense"
 
-#include "../basicf.h"
-#include "../loadm.h"
-#include "../myvector.h"
-#include "../mymatrix.h"
-#include "../group.h"
-#include "../yukawa.h"
+#include "../3hdm"
 
 
 int main() {
@@ -19,15 +14,15 @@ int main() {
 
 	std::fstream ifile;
 	std::vector<Eigen::MatrixXcd> vm;
-	std::vector<MyMatrix> vmm;
+	std::vector<MyMatrix<std::complex<double>>> vmm;
 
-	ifile = fileOpener("gs/", "[ 12, 3 ]", std::ios::in);
-	vm = loadM(ifile, 3, 8);
+	ifile = basic::fileOpener("gs/", "[ 12, 3 ]", std::ios::in);
+	vm = load::loadM<std::complex<double>>(ifile, 3, 8);
 	// the second argument determines dim of matrix while the third one determines decimal precision of its elements
 	for (auto i : vm) vmm.emplace_back(i);
 
-	Group g(vmm, "[ 12, 3 ]", 1), kp, es; // the third argument determines the number of representations of given group
-	MyMatrix ib;
+	Group<std::complex<double>> g(vmm, "[ 12, 3 ]", 1), kp, es; // the third argument determines the number of representations of given group
+	MyMatrix<std::complex<double>> ib;
 
 	// for one combination of matrix representations of given group
 
@@ -48,7 +43,7 @@ int main() {
 	// for all combinations of matrix representations of given group
 
 	std::fstream ofile_c, ofile_d, ofile_ps;
-	std::vector<Yukawa> vy_c, vy_d, vy_ps;
+	std::vector<Yukawa<std::complex<double>>> vy_c, vy_d, vy_ps;
 
 	vy_c = g.findSolutions("charged", ofile_c);
 	vy_d = g.findSolutions("dirac", ofile_d);

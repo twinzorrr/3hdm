@@ -21,21 +21,6 @@
     <ClCompile Include="basicf.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="group.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="loadm.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="mymatrix.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="myvector.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
-    <ClCompile Include="yukawa.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
     <ClCompile Include="examples\source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

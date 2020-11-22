@@ -3,12 +3,7 @@
 #include <vector>
 #include "../Eigen/Dense"
 
-#include "../basicf.h"
-#include "../loadm.h"
-#include "../myvector.h"
-#include "../mymatrix.h"
-#include "../group.h"
-#include "../yukawa.h"
+#include "../3hdm"
 
 
 int main() {
@@ -19,41 +14,41 @@ int main() {
 
 	std::fstream ifile, ofile1, ofile2, ofile3;
 	std::vector<Eigen::MatrixXcd> vm;
-	std::vector<MyMatrix> vmm;
+	std::vector<MyMatrix<std::complex<double>>> vmm;
 
-	ifile = fileOpener("gs/", "[ 21, 1 ]", std::ios::in);
-	vm = loadM(ifile, 3, 8);
+	ifile = basic::fileOpener("gs/", "[ 21, 1 ]", std::ios::in);
+	vm = load::loadM<std::complex<double>>(ifile, 3, 8);
 	// the second argument determines dim of matrix while the third one determines decimal precision of its elements
 	for (auto i : vm) vmm.emplace_back(i);
-	Group g(vmm, "[ 21, 1 ]", 2); // the third argument determines the number of representations of given group
+	Group<std::complex<double>> g(vmm, "[ 21, 1 ]", 2); // the third argument determines the number of representations of given group
 
-	std::vector<Yukawa> vy_c, vy_d, vy_ps;
+	std::vector<Yukawa<std::complex<double>>> vy_c, vy_d, vy_ps;
 	vy_ps = g.findPairSolutions(vy_c, vy_d, ofile1, ofile2, ofile3);
 	std::cout << std::endl;
 
-	Yukawa yu_c, yu_d;
+	Yukawa<std::complex<double>> yu_c, yu_d;
 	findUniqueVectors(vy_c, yu_c, "[ 21, 1 ]");
 	findUniqueVectors(vy_c, yu_d, "[ 21, 1 ]");
 	std::cout << "findUniqueVectors (for charged particles): " << yu_c.getSize() << std::endl << yu_c << std::endl;
 	//yu_c.printToFile(filename);
 
-	Yukawa yu_ps;
+	Yukawa<std::complex<double>> yu_ps;
 	findUniquePairs(vy_ps, yu_ps, "[ 21, 1 ]");
 	std::cout << "findUniquePairs: " << yu_ps.getSize() / 2 << std::endl << yu_ps << std::endl;
 	//yu_ps.printToFile(filename);
 
-	Yukawa yu_wp;
+	Yukawa<std::complex<double>> yu_wp;
 	yu_ps.findSolutionsWithPhases(yu_wp);
 	std::cout << "findSolutionsWithPhases (for pairs): " << yu_wp.getSize() / 2 << std::endl << yu_wp << std::endl;
-	
+
 	// or if one also wants to find solutions with unity elements for pairs then instead of above method we can call the following one
 
 	yu_wp.clear();
-	Yukawa yu_wue;
+	Yukawa<std::complex<double>> yu_wue;
 	yu_ps.findSolutionsWithUnityElements(yu_wp, yu_wue);
 	std::cout << "findSolutionsWithUnityElements (for pairs): " << yu_wue.getSize() / 2 << std::endl << yu_wue << std::endl;
 
-	Yukawa yu_psm;
+	Yukawa<std::complex<double>> yu_psm;
 	findUniqueMatrixPairs(yu_ps, yu_psm);
 	std::cout << "findUniqueMatrixPairs: " << yu_psm.getSize() / 2 << std::endl << yu_psm << std::endl;
 	// yu_psm.printToFile(filename, {});
@@ -66,13 +61,13 @@ int main() {
 	std::cout << "findMassRatio (for pairs): " << std::endl << yu_psm << std::endl;
 	// yu_psm.printToFile(filename, vd_p);
 
-	Yukawa yu_psc, yu_psd;
+	Yukawa<std::complex<double>> yu_psc, yu_psd;
 	yu_ps.splitPairsintoVectors(yu_psc, yu_psd);
 	std::cout << "splitPairsintoVectors (charged vectors part): " << std::endl << yu_psc << std::endl;
 
 	// one can also find solutions with phases and unity elements as well unique matrices for Yukawa vectors as follows
 
-	Yukawa yu_wpc, yu_wpd;
+	Yukawa<std::complex<double>> yu_wpc, yu_wpd;
 	yu_psc.findSolutionsWithPhases(yu_wpc);
 	yu_psd.findSolutionsWithPhases(yu_wpd);
 	std::cout << "findSolutionsWithPhases (for charged vectors): " << yu_wpc.getSize() << std::endl << yu_wpc << std::endl;
@@ -80,12 +75,12 @@ int main() {
 	// or if one also wants to find solutions with unity elements for vectors then instead of above 2 methods we can call the following ones
 
 	yu_wpc.clear(); yu_wpd.clear();
-	Yukawa yu_wuec, yu_wued;
+	Yukawa<std::complex<double>> yu_wuec, yu_wued;
 	yu_psc.findSolutionsWithUnityElements(yu_wpc, yu_wuec);
 	yu_psd.findSolutionsWithUnityElements(yu_wpd, yu_wued);
 	std::cout << "findSolutionsWithUnityElements (for charged vectors): " << yu_wpc.getSize() << std::endl << yu_wpc << std::endl;
 
-	Yukawa yu_pscm, yu_psdm;
+	Yukawa<std::complex<double>> yu_pscm, yu_psdm;
 	findUniqueMatrices(yu_psc, yu_pscm);
 	findUniqueMatrices(yu_psd, yu_psdm);
 	std::cout << "findUniqueMatrices (charged part): " << std::endl << yu_pscm << std::endl;
@@ -123,24 +118,24 @@ int main() {
 		cd(0, 0), cd(0, 0), cd(0, 0), cd(0, 0), cd(0, 0), cd(0, 0), cd(-0.5, -0.866025), cd(0, 0), cd(0, 0),
 		cd(0, 0), cd(-0.5, 0.866025), cd(0, 0), cd(0, 0), cd(0, 0), cd(0, 0), cd(0, 0), cd(0, 0), cd(0, 0);
 
-	std::vector<MyVector> vmv;
+	std::vector<MyVector<cd>> vmv;
 	std::vector<std::string> vs;
 	vmv.emplace_back(v1); vmv.emplace_back(v2); vmv.emplace_back(v3);
 	vs.emplace_back("No group"); vs.emplace_back("No group"); vs.emplace_back("No group");
-	Yukawa yv(yo::VECTOR, vmv, vs), yp(yo::PAIR, vmv, vs);
+	Yukawa<cd> yv(yo::VECTOR, vmv, vs), yp(yo::PAIR, vmv, vs);
 
-	std::cout << "isUniqueVector: " << yv.isUniqueVector(MyVector(v3), "No group") << std::endl;
-	std::cout << "isUniqueVector: " << yv.isUniqueVector(MyVector(v4), "No group") << std::endl;
+	std::cout << "isUniqueVector: " << yv.isUniqueVector(MyVector<cd>(v3), "No group") << std::endl;
+	std::cout << "isUniqueVector: " << yv.isUniqueVector(MyVector<cd>(v4), "No group") << std::endl;
 
-	std::cout << "isUniquePair: " << yp.isUniquePair(MyVector(v1), MyVector(v2), "No group") << std::endl;
-	std::cout << "isUniquePair: " << yp.isUniquePair(MyVector(v1), MyVector(v4), "No group") << std::endl;
+	std::cout << "isUniquePair: " << yp.isUniquePair(MyVector<cd>(v1), MyVector<cd>(v2), "No group") << std::endl;
+	std::cout << "isUniquePair: " << yp.isUniquePair(MyVector<cd>(v1), MyVector<cd>(v4), "No group") << std::endl;
 
-	std::cout << "isUniqueMatrix: " << yv.isUniqueMatrix(MyVector(v4), "No group") << std::endl;
-	std::cout << "isUniqueMatrix: " << yv.isUniqueMatrix(MyVector(v5), "No group") << std::endl;
+	std::cout << "isUniqueMatrix: " << yv.isUniqueMatrix(MyVector<cd>(v4), "No group") << std::endl;
+	std::cout << "isUniqueMatrix: " << yv.isUniqueMatrix(MyVector<cd>(v5), "No group") << std::endl;
 
-	std::cout << "isUniqueMatrixPair: " << yp.isUniqueMatrixPair(MyVector(v1), MyVector(v2), "No group") << std::endl;
-	std::cout << "isUniqueMatrixPair: " << yp.isUniqueMatrixPair(MyVector(v4), MyVector(v4), "No group") << std::endl;
-
+	std::cout << "isUniqueMatrixPair: " << yp.isUniqueMatrixPair(MyVector<cd>(v1), MyVector<cd>(v2), "No group") << std::endl;
+	std::cout << "isUniqueMatrixPair: " << yp.isUniqueMatrixPair(MyVector<cd>(v4), MyVector<cd>(v4), "No group") << std::endl;
+	
 	return EXIT_SUCCESS;
 
 }
