@@ -7,7 +7,7 @@
 
 
 int main() {
-
+	
 	// In general, one can obtain given group by loading appropriate file with the name given by id of this group
 	// The list of all physical groups can be found in the groups.txt file, while the number of 3-dim representations
 	// for these groups can be found in the nors.txt file
@@ -57,7 +57,7 @@ int main() {
 
 	// It is not recommended to initialize groups by our hands, however if one wants to do that then remember that
 	// their matrix representations must be 3-dim
-
+	
 	return EXIT_SUCCESS;
 
 }

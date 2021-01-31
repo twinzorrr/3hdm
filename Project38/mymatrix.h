@@ -9,6 +9,7 @@ template<typename T> using Real = typename Eigen::NumTraits<T>::Real;
 
 
 template<typename T> void setNumericZerotoActualZero_(Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>&);
+template<typename T, typename U> MyMatrix<T> mycast(const MyMatrix<U>&, bool, bool);
 template<typename T> MyMatrix<T> getKroneckerProduct3(const MyMatrix<T>&, const MyMatrix<T>&, const MyMatrix<T>&, const std::string&);
 template<typename T> MyMatrix<T> getIntersectionBasis(const MyMatrix<T>&, const MyMatrix<T>&);
 
@@ -18,6 +19,8 @@ class MyMatrix
 public:
 	MyMatrix();
 	explicit MyMatrix(const Eigen::Matrix<_scalar, Eigen::Dynamic, Eigen::Dynamic>&);
+	MyMatrix(const MyMatrix&) = default;
+	MyMatrix(MyMatrix&&) = default;
 	int getNumberofRows() const { return row_; }
 	int getNumberofCols() const { return col_; }
 	void setNumericZerotoActualZero();
@@ -26,7 +29,11 @@ public:
 	MyMatrix getEigenvectors1() const;
 	friend MyMatrix getIntersectionBasis<_scalar>(const MyMatrix&, const MyMatrix&);
 	Yukawa<_scalar> extractYukawaSolution() const;
+	friend MyMatrix mycast(const MyMatrix&, bool, bool);
+	const _scalar operator()(int row, int col) const { return m_(row, col); }
 	friend std::ostream& operator<<(std::ostream& os, const MyMatrix& mm) { return os << (mm.m_).format(fmtM); }
+	MyMatrix& operator=(const MyMatrix& other) { if (this != &other) { row_ = other.row_; col_ = other.col_; m_ = other.m_; } return *this; }
+	MyMatrix& operator=(MyMatrix&& other) noexcept { if (this != &other) { row_ = std::move(other.row_); col_ = std::move(other.col_); m_ = std::move(other.m_); } return *this; }
 private:
 	friend void setNumericZerotoActualZero_(Eigen::Matrix<_scalar, Eigen::Dynamic, Eigen::Dynamic>&);
 	int row_;
@@ -39,8 +46,8 @@ void setNumericZerotoActualZero_(Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic
 
 	for (int row = 0; row < m.rows(); row++) {
 		for (int col = 0; col < m.cols(); col++) {
-			if (abs(real(m(row, col))) < (Real<T>)0.0001) { m(row, col).real((Real<T>)0); }
-			if (abs(imag(m(row, col))) < (Real<T>)0.0001) { m(row, col).imag((Real<T>)0); }
+			if (abs(real(m(row, col))) < (Real<T>)0.000001) { m(row, col).real((Real<T>)0); }
+			if (abs(imag(m(row, col))) < (Real<T>)0.000001) { m(row, col).imag((Real<T>)0); }
 		}
 	}
 
@@ -136,6 +143,34 @@ Yukawa<_scalar> MyMatrix<_scalar>::extractYukawaSolution() const {
 	ys.reserve(col_);
 	for (int col = 0; col < col_; col++) { ys.emplace_back(m_.col(col)); }
 	return ys;
+
+}
+
+template<typename T, typename U>
+MyMatrix<T> mycast(const MyMatrix<U>& mm, bool iscast1, bool iscast2) {
+
+	Eigen::Matrix<T, 27, 27> nn;
+	size_t l1, l2;
+	std::string sreal, simag, s;
+	std::stringstream ss;
+
+	for (int i = 0; i < mm.getNumberofRows(); i++) {
+		for (int j = 0; j < mm.getNumberofCols(); j++) {
+			sreal = boost::lexical_cast<std::string>(mm(i, j).real());
+			simag = boost::lexical_cast<std::string>(mm(i, j).imag());
+			l1 = 10; l2 = 10;
+			if (sreal[0] == '-') l1 = 11; if (simag[0] == '-') l2 = 11;
+			std::string s1(sreal, 0, l1); std::string s2(simag, 0, l2);
+			if (iscast1) { if (s2 == "0.64278760") s2 = "0.64278761"; if (s2 == "-0.64278760") s2 = "-0.64278761"; }
+			if (iscast2) { if (s1 == "0.17364817") s1 = "0.17364818"; if (s1 == "-0.17364817") s1 = "-0.17364818"; }
+			s = " (" + s1 + "," + s2 + ")";
+			ss << s;
+		}
+	}
+
+	load::detail::loadMatrix(ss, nn, 27);
+
+	return MyMatrix<T>(nn);
 
 }
 

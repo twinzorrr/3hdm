@@ -20,6 +20,8 @@ class Yukawa
 public:
 	Yukawa();
 	Yukawa(yo, const std::vector<MyVector<_scalar>>&, const std::vector<std::string>& vs = {});
+	Yukawa(const Yukawa&) = default;
+	Yukawa(Yukawa&&) = default;
 	size_t getSize() const { return vv_.size(); }
 	void reserve(size_t i) { vv_.reserve(i); }
 	void emplace_back(const Eigen::Matrix<_scalar, Eigen::Dynamic, 1>& v) { vv_.emplace_back(v); }
@@ -42,7 +44,7 @@ public:
 	void findSolutionsWithPhases(Yukawa&) const;
 	void findSolutionsWithUnityElements(Yukawa&, Yukawa&) const;
 	void printToFile(const std::string&);
-	void printToFile(const std::string&, std::vector<std::vector<Real<_scalar>>> vvd);
+	void printToFile(const std::string&, const std::vector<std::vector<Real<_scalar>>>& vvsc);
 	auto begin() { return vv_.begin(); }
 	auto end() { return vv_.end(); }
 	auto begin() const { return vv_.begin(); }
@@ -50,9 +52,11 @@ public:
 	MyVector<_scalar>& operator[](size_t);
 	const MyVector<_scalar>& operator[](size_t) const;
 	friend std::ostream& operator<<(std::ostream& os, const Yukawa& y) { for (auto i : y.vv_) os << i << std::endl; return os; }
+	Yukawa& operator=(const Yukawa& other) { if (this != &other) { solution_ = other.solution_; vs_ = other.vs_; vv_ = other.vv_; } return *this; }
+	Yukawa& operator=(Yukawa&& other) noexcept { if (this != &other) { solution_ = std::move(other.solution_); vs_ = std::move(other.vs_); vv_ = std::move(other.vv_); } return *this; }
 private:
 	std::vector<Eigen::Matrix<_scalar, 3, 3>> convertSolutionstoMassMatrices() const;
-	void printMassRatio(std::vector<Real<_scalar>>&, std::fstream&) const;
+	void printMassRatio(const std::vector<Real<_scalar>>&, std::fstream&) const;
 	yo solution_;
 	std::vector<std::string> vs_;
 	std::vector<MyVector<_scalar>> vv_;
@@ -74,11 +78,11 @@ std::vector<Eigen::Matrix<_scalar, 3, 3>> Yukawa<_scalar>::convertSolutionstoMas
 }
 
 template<typename _scalar>
-void Yukawa<_scalar>::printMassRatio(std::vector<Real<_scalar>>& vd, std::fstream& file) const {
+void Yukawa<_scalar>::printMassRatio(const std::vector<Real<_scalar>>& vsc, std::fstream& file) const {
 
-	file << "Muon electron mass ratio" << std::endl << " min: " << vd[0] << " max: " << vd[1] << std::endl;
-	file << "Tau electron mass ratio" << std::endl << " min: " << vd[2] << " max: " << vd[3] << std::endl;
-	file << "Tau muon mass ratio" << std::endl << " min: " << vd[4] << " max: " << vd[5] << std::endl;
+	file << "Muon electron mass ratio" << std::endl << " min: " << vsc[0] << " max: " << vsc[1] << std::endl;
+	file << "Tau electron mass ratio" << std::endl << " min: " << vsc[2] << " max: " << vsc[3] << std::endl;
+	file << "Tau muon mass ratio" << std::endl << " min: " << vsc[4] << " max: " << vsc[5] << std::endl;
 	file << std::endl << std::endl;
 
 }
@@ -103,13 +107,13 @@ template<typename _scalar>
 bool Yukawa<_scalar>::errorGuard(const Group<_scalar>& g) const {
 
 	for (auto i : vv_) {
-		if (!g.isEigenvector1(i)) { std::cerr << std::endl << "Yukawa solution is not a eigenvector! "; return true; }
-		if (i.isApprox(MyVector<_scalar>(Eigen::Matrix<_scalar, 27, 1>::Zero(27)), (Real<_scalar>)0.01)) { std::cerr << std::endl << "Yukawa solution is a zero vector! "; return true; }
+		if (!g.isEigenvector1(i)) { /*std::cerr << "Yukawa solution is not a eigenvector! ";*/ return true; }
+		if (i.isApprox(MyVector<_scalar>(Eigen::Matrix<_scalar, 27, 1>::Zero(27)), (Real<_scalar>)0.01)) { /*std::cerr << "Yukawa solution is a zero vector! ";*/ return true; }
 	}
 
 	for (size_t i = 0; i < getSize() - 1; i++) {
 		for (size_t j = i + 1; j < getSize(); j++) {
-			if (vv_[i].isApprox(vv_[j], (Real<_scalar>)0.0001)) { std::cerr << std::endl << "Duplicate Yukawa solution! "; return true; }
+			if (vv_[i].isApprox(vv_[j], (Real<_scalar>)0.0001)) { /*std::cerr << "Duplicate Yukawa solution! ";*/ return true; }
 		}
 	}
 
@@ -259,8 +263,8 @@ void findMassRatio(const Yukawa<T>& ys, Real<T> step, Yukawa<T>& ys_m, std::vect
 
 	std::vector<Real<T>> vd;
 
-	if ((int)ys.solution_ == 1) findUniqueMatrices(ys, ys_m);
-	if ((int)ys.solution_ == 2) findUniqueMatrixPairs(ys, ys_m);
+	if ((int)ys.solution_ == 1) { findUniqueMatrices(ys, ys_m); std::cout << std::endl << ys_m.getSize() << " unique mass matrices found!" << std::endl; }
+	if ((int)ys.solution_ == 2) { findUniqueMatrixPairs(ys, ys_m); std::cout << std::endl << ys_m.getSize() / 2 << " unique pairs of mass matrices found!" << std::endl; }
 	vvd.reserve(ys_m.getSize());
 
 	for (auto i : ys_m) {
@@ -332,7 +336,7 @@ void Yukawa<_scalar>::printToFile(const std::string& s) {
 }
 
 template<typename _scalar>
-void Yukawa<_scalar>::printToFile(const std::string& s, std::vector<std::vector<Real<_scalar>>> vvd) {
+void Yukawa<_scalar>::printToFile(const std::string& s, const std::vector<std::vector<Real<_scalar>>>& vvsc) {
 
 	std::fstream ofile;
 	std::vector<Eigen::Matrix<_scalar, 3, 3>> vm;
@@ -346,7 +350,7 @@ void Yukawa<_scalar>::printToFile(const std::string& s, std::vector<std::vector<
 		if ((int)solution_ == 1) ofile << i + 1 << " { " << vs_[i] << "} " << std::endl;
 		if ((int)solution_ == 2 && !(i % (int)solution_)) ofile << (i / 2) + 1 << " { " << vs_[i / 2] << "} " << std::endl;
 		ofile << mm << std::endl << std::endl;
-		if (vvd.size()) printMassRatio(vvd[i], ofile);
+		if (vvsc.size()) printMassRatio(vvsc[i], ofile);
 	}
 
 	ofile.close();

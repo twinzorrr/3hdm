@@ -15,26 +15,26 @@ int main() {
 	std::vector<size_t> vn;
 	std::vector<Eigen::MatrixXcd> vm;
 	std::vector<MyMatrix<cd>> vmm;
-	std::vector<Yukawa<cd>> vys_c, vys_d, vys_ps;
-	Yukawa<cd> ysu_c, ysu_d, ysu_ps, ysu_psm, ys_wp, ys_wue, ys_wpc, ys_wpd, ys_wpcm, ys_wpdm;
+	std::vector<Yukawa<cd>> vyc, vyd, vyp;
+	Yukawa<cd> yc, yd, yp, ypm, ypp, ypu, yppc, yppd, yppcm, yppdm;
 
 	ofile1 = basic::fileOpener("outputs/", "charged_all.txt", std::ios::out);
 	ofile2 = basic::fileOpener("outputs/", "dirac_all.txt", std::ios::out);
-	ofile3 = basic::fileOpener("outputs/", "pair_solutions.txt", std::ios::out);
+	ofile3 = basic::fileOpener("outputs/", "pair_all.txt", std::ios::out);
 
-	vs = basic::loadString("", "groups.txt");
-	vn = basic::loadInteger("", "nors.txt");
+	(basic::loadString("", "groups.txt")).swap(vs);
+	(basic::loadInteger("", "nors.txt")).swap(vn);
 
 	for (size_t s = 0; s < vs.size(); s++) {
 		ifile = basic::fileOpener("gs/", vs[s], std::ios::in);
 		vm = load::loadM<cd>(ifile, 3, 8);
 		vmm.reserve(vm.size());
-		for (auto i : vm) vmm.emplace_back(i);
+		for (const auto& i : vm) vmm.emplace_back(i);
 		Group<cd> g(vmm, vs[s], vn[s]); vm.clear();
-		(g.findPairSolutions(vys_c, vys_d, ofile1, ofile2, ofile3)).swap(vys_ps);
-		findUniqueVectors(vys_c, ysu_c, vs[s]);
-		findUniqueVectors(vys_d, ysu_d, vs[s]);
-		if (vys_ps.size()) findUniquePairs(vys_ps, ysu_ps, vs[s]);
+		(g.findPairSolutions(vyc, vyd, ofile1, ofile2, ofile3)).swap(vyp);
+		findUniqueVectors(vyc, yc, vs[s]);
+		findUniqueVectors(vyd, yd, vs[s]);
+		if (vyp.size()) findUniquePairs(vyp, yp, vs[s]);
 		vmm.clear();
 	}
 
@@ -42,23 +42,23 @@ int main() {
 	ofile2.close();
 	ofile1.close();
 
-	ysu_c.printToFile("charged_unique.txt");
-	ysu_d.printToFile("dirac_unique.txt");
-	ysu_ps.printToFile("pair_solutions_unique.txt");
+	yc.printToFile("charged_unique.txt");
+	yd.printToFile("dirac_unique.txt");
+	yp.printToFile("pair_unique.txt");
 	
-	findUniqueMatrixPairs(ysu_ps, ysu_psm);
-	ysu_psm.printToFile("pair_mass_matrices_unique.txt", {});
+	findUniqueMatrixPairs(yp, ypm);
+	ypm.printToFile("pair_massmatrix.txt", {});
 
-	ysu_ps.findSolutionsWithUnityElements(ys_wp, ys_wue);
-	ys_wp.printToFile("pair_withphases.txt");
-	ys_wue.printToFile("pair_withunityelements.txt");
+	yp.findSolutionsWithUnityElements(ypp, ypu);
+	ypp.printToFile("pair_withphases.txt");
+	ypu.printToFile("pair_withunityelements.txt");
 	
-	ys_wp.splitPairsintoVectors(ys_wpc, ys_wpd);
-	findUniqueMatrices(ys_wpc, ys_wpcm);
-	findUniqueMatrices(ys_wpd, ys_wpdm);
-	ys_wpcm.printToFile("charged_mass_matrices_unique.txt", {});
-	ys_wpdm.printToFile("dirac_mass_matrices_unique.txt", {});
-
+	ypp.splitPairsintoVectors(yppc, yppd);
+	findUniqueMatrices(yppc, yppcm);
+	findUniqueMatrices(yppd, yppdm);
+	yppcm.printToFile("charged_massmatrix.txt", {});
+	yppdm.printToFile("dirac_massmatrix.txt", {});
+	
 	return EXIT_SUCCESS;
 	
 }

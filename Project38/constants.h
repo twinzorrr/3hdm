@@ -2,8 +2,6 @@
 #ifndef CONSTANTS_H_
 #define CONSTANTS_H_
 
-#include "Eigen/Dense"
-
 
 const Eigen::IOFormat fmtV(6, Eigen::DontAlignCols, " ", " ", "", "", "[", "]");
 const Eigen::IOFormat fmtM(6, 0, " ", "\n", "[", "]");

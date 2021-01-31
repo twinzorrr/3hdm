@@ -15,6 +15,8 @@ class MyVector
 public:
 	MyVector();
 	explicit MyVector(const Eigen::Matrix<_scalar, Eigen::Dynamic, 1>&);
+	MyVector(const MyVector&) = default;
+	MyVector(MyVector&&) = default;
 	int getNumberofElements() const { return size_; }
 	void setNumericZerotoActualZero();
 	void setFirstNonZeroElementto1();
@@ -27,6 +29,8 @@ public:
 	MyVector setAllNonZeroElementsto1() const;
 	friend MyVector operator*(const Eigen::Matrix<_scalar, Eigen::Dynamic, Eigen::Dynamic>& m, const MyVector& mv) { return MyVector<_scalar>(m * mv.v_); }
 	friend std::ostream& operator<<(std::ostream& os, const MyVector& mv) { return os << mv.v_.format(fmtV); }
+	MyVector& operator=(const MyVector& other) { if (this != &other) { size_ = other.size_; v_ = other.v_; } return *this; }
+	MyVector& operator=(MyVector&& other) noexcept { if (this != &other) { size_ = std::move(other.size_); v_ = std::move(other.v_); } return *this; }
 private:
 	friend int getIndexofFirstNonZeroElement(const Eigen::Matrix<_scalar, Eigen::Dynamic, 1>&);
 	friend void setNumericZerotoActualZero_(Eigen::Matrix<_scalar, Eigen::Dynamic, 1>&);
@@ -39,17 +43,17 @@ private:
 template<typename T>
 int getIndexofFirstNonZeroElement(const Eigen::Matrix<T, Eigen::Dynamic, 1>& v) {
 
-	for (int i = 0; i < v.size(); i++) { if (!(abs(v(i)) < Real<T>(LDBL_EPSILON * 10.0L))) return i; }
+	for (int i = 0; i < v.size(); i++) { if (abs(real(v(i))) > (Real<T>)0.000001 || abs(imag(v(i))) > (Real<T>)0.000001) return i; }
 	return 0;
 
 }
 
 template<typename T>
-void setNumericZerotoActualZero_(Eigen::Matrix<T, Eigen::Dynamic, 1>& v) {
+void setNumericZerotoActualZero_(Eigen::Matrix<T, Eigen::Dynamic, 1>& v) { 
 
 	for (int i = 0; i < v.size(); i++) {
-		if (abs(real(v(i))) < (Real<T>)0.0001) v(i).real((Real<T>)0);
-		if (abs(imag(v(i))) < (Real<T>)0.0001) v(i).imag((Real<T>)0);
+		if (abs(real(v(i))) < (Real<T>)0.000001) v(i).real((Real<T>)0);
+		if (abs(imag(v(i))) < (Real<T>)0.000001) v(i).imag((Real<T>)0);
 	}
 
 }
@@ -58,7 +62,7 @@ template<typename T>
 void setFirstNonZeroElementto1_(Eigen::Matrix<T, Eigen::Dynamic, 1>& v) {
 
 	for (int i = 0; i < v.size(); i++) {
-		if (!(abs(v(i)) < Real<T>(LDBL_EPSILON * 10.0L))) { v = ((Real<T>)1 / v(i)) * v; break; }
+		if (abs(real(v(i))) > (Real<T>)0.000001 || abs(imag(v(i))) > (Real<T>)0.000001) { v = ((Real<T>)1 / v(i)) * v; break; }
 	}
 
 }
@@ -148,7 +152,7 @@ std::vector<_scalar> MyVector<_scalar>::getPhases() {
 	bool justonce = true;
 
 	for (int i = 0; i < getNumberofElements(); i++) {
-		if (!(abs(v_(i)) < (Real<_scalar>)LDBL_EPSILON * 10L)) {
+		if (abs(real(v_(i))) > (Real<_scalar>)0.000001 || abs(imag(v_(i))) > (Real<_scalar>)0.000001) {
 			if (justonce) { justonce = false; continue; }
 			vsc.push_back(v_(i));
 		}
@@ -180,13 +184,13 @@ MyVector<_scalar> MyVector<_scalar>::setAllNonZeroElementsto1() const {
 	Eigen::Matrix<_scalar, Eigen::Dynamic, 1> v = Eigen::Matrix<_scalar, Eigen::Dynamic, 1>::Zero(27);
 	
 	for (int i = 0; i < getNumberofElements(); i++) {
-		if (!(abs(v_(i)) < (Real<_scalar>)LDBL_EPSILON * 10L)) {
+		if (abs(real(v_(i))) > (Real<_scalar>)0.0000001 || abs(imag(v_(i))) > (Real<_scalar>)0.0000001) {
 			v(i).real((Real<_scalar>)1); v(i).imag((Real<_scalar>)0);
 		}
 	}
 	
 	return MyVector(v);
-
+	
 }
 
 #endif // !MYVECTOR_H_

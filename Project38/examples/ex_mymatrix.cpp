@@ -7,7 +7,7 @@
 
 
 int main() {
-
+	
 	Eigen::Matrix3cd m1, m2, m3;
 	m1 << 0, 1, 0, 0, 0, 1, 1, 0, 0;
 	m2 << -1, 0, 0, 0, 1, 0, 0, 0, -1;
@@ -19,6 +19,8 @@ int main() {
 	kp2 = getKroneckerProduct3(mm2, mm2, mm2, "charged");
 	kp3 = getKroneckerProduct3(mm3, mm3, mm3, "charged");
 	std::cout << "getKroneckerProduct3: " << std::endl << kp1 << std::endl << std::endl;
+
+	std::cout << mycast<std::complex<float>, std::complex<double>>(kp1, false, false) << std::endl;
 
 	es1 = kp1.getEigenvectors1();
 	es2 = kp2.getEigenvectors1();
